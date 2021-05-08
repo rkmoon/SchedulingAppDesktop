@@ -1,6 +1,6 @@
 package model;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 public class Appointment {
 
@@ -8,23 +8,35 @@ public class Appointment {
     private String title;
     private String description;
     private String location;
-    private String contact;
     private String type;
-    private Date startDate;
-    private Date endDate;
-    private int customerId;
+    private Timestamp start;
+    private Timestamp end;
+    private Timestamp createDate;
+    private String createdBy;
+    private Timestamp lastUpdate;
+    private Timestamp lastUpdateBy;
+    private int custId;
+    private int userId;
+    private int contactId;
 
-    public Appointment(int id, String title, String description, String location, String contact, String type,
-                       Date startDate, Date endDate, int customerId){
+
+    public Appointment(int id, String title, String description, String location, String type, Timestamp start,
+                       Timestamp end, Timestamp createDate, String createdBy, Timestamp lastUpdate,
+                       Timestamp lastUpdateBy, int custId, int userId, int contactId) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.location = location;
-        this.contact = contact;
         this.type = type;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.customerId = customerId;
+        this.start = start;
+        this.end = end;
+        this.createDate = createDate;
+        this.createdBy = createdBy;
+        this.lastUpdate = lastUpdate;
+        this.lastUpdateBy = lastUpdateBy;
+        this.custId = custId;
+        this.userId = userId;
+        this.contactId = contactId;
     }
 
     public int getId() {
@@ -59,14 +71,6 @@ public class Appointment {
         this.location = location;
     }
 
-    public String getContact() {
-        return contact;
-    }
-
-    public void setContact(String contact) {
-        this.contact = contact;
-    }
-
     public String getType() {
         return type;
     }
@@ -75,27 +79,75 @@ public class Appointment {
         this.type = type;
     }
 
-    public Date getStartDate() {
-        return startDate;
+    public Timestamp getStart() {
+        return start;
     }
 
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
+    public void setStart(Timestamp start) {
+        this.start = start;
     }
 
-    public Date getEndDate() {
-        return endDate;
+    public Timestamp getEnd() {
+        return end;
     }
 
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
+    public void setEnd(Timestamp end) {
+        this.end = end;
     }
 
-    public int getCustomerId() {
-        return customerId;
+    public Timestamp getCreateDate() {
+        return createDate;
     }
 
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
+    public void setCreateDate(Timestamp createDate) {
+        this.createDate = createDate;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Timestamp getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(Timestamp lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+
+    public Timestamp getLastUpdateBy() {
+        return lastUpdateBy;
+    }
+
+    public void setLastUpdateBy(Timestamp lastUpdateBy) {
+        this.lastUpdateBy = lastUpdateBy;
+    }
+
+    public int getCustId() {
+        return custId;
+    }
+
+    public void setCustId(int custId) {
+        this.custId = custId;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public int getContactId() {
+        return contactId;
+    }
+
+    public void setContactId(int contactId) {
+        this.contactId = contactId;
     }
 }

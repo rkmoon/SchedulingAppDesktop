@@ -1,19 +1,34 @@
 package model;
 
+import java.sql.Timestamp;
+
 public class Customer {
     private int id;
     private String name;
     private String address;
     private String postCode;
     private String phoneNum;
+    private Timestamp createDate;
+    private String createBy;
+    private Timestamp lastUpdate;
+    private String lastUpdateBy;
+    private int divID;
 
-    public Customer(int id, String name, String address, String postCode, String phoneNum){
+    public Customer(){}
+    public Customer(int id, String name, String address, String postCode, String phoneNum, Timestamp createDate,
+                    String createBy, Timestamp lastUpdate, String lastUpdateBy, int divID) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.postCode = postCode;
         this.phoneNum = phoneNum;
+        this.createDate = createDate;
+        this.createBy = createBy;
+        this.lastUpdate = lastUpdate;
+        this.lastUpdateBy = lastUpdateBy;
+        this.divID = divID;
     }
+
 
     public int getId() {
         return id;
@@ -53,5 +68,45 @@ public class Customer {
 
     public void setPhoneNum(String phoneNum) {
         this.phoneNum = phoneNum;
+    }
+
+    public Timestamp getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Timestamp createDate) {
+        this.createDate = createDate;
+    }
+
+    public String getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
+    }
+
+    public Timestamp getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(Timestamp lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+
+    public String getLastUpdateBy() {
+        return lastUpdateBy;
+    }
+
+    public void setLastUpdateBy(String lastUpdateBy) {
+        this.lastUpdateBy = lastUpdateBy;
+    }
+
+    public int getDivID() {
+        return divID;
+    }
+
+    public void setDivID(int divID) {
+        this.divID = divID;
     }
 }
