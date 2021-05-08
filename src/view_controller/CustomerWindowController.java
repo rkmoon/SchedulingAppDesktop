@@ -6,10 +6,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import main.Appointment;
-import main.Customer;
-import utils.DBConnection;
-import utils.DBQuery;
+import model.Appointment;
+import model.Customer;
+import DAO.DBConnection;
+import DAO.DBQuery;
 import utils.ObjectArrays;
 
 import java.sql.Date;

@@ -2,8 +2,8 @@ package utils;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import main.Appointment;
-import main.Customer;
+import model.Appointment;
+import model.Customer;
 
 public class ObjectArrays {
 

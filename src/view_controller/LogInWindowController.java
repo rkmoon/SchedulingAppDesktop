@@ -8,8 +8,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import utils.DBConnection;
-import utils.DBQuery;
+import DAO.DBConnection;
+import DAO.DBQuery;
 
 import java.io.IOException;
 import java.sql.PreparedStatement;
