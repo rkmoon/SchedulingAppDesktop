@@ -14,15 +14,15 @@ public class Appointment {
     private Timestamp createDate;
     private String createdBy;
     private Timestamp lastUpdate;
-    private Timestamp lastUpdateBy;
+    private String lastUpdateBy;
     private int custId;
     private int userId;
     private int contactId;
 
-
+    public Appointment(){}
     public Appointment(int id, String title, String description, String location, String type, Timestamp start,
                        Timestamp end, Timestamp createDate, String createdBy, Timestamp lastUpdate,
-                       Timestamp lastUpdateBy, int custId, int userId, int contactId) {
+                       String lastUpdateBy, int custId, int userId, int contactId) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -119,11 +119,11 @@ public class Appointment {
         this.lastUpdate = lastUpdate;
     }
 
-    public Timestamp getLastUpdateBy() {
+    public String getLastUpdateBy() {
         return lastUpdateBy;
     }
 
-    public void setLastUpdateBy(Timestamp lastUpdateBy) {
+    public void setLastUpdateBy(String lastUpdateBy) {
         this.lastUpdateBy = lastUpdateBy;
     }
 

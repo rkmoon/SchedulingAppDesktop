@@ -9,9 +9,9 @@
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="233.0" prefWidth="498.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_controller.LogInWindowController">
    <children>
       <TextField fx:id="usernameText" layoutX="175.0" layoutY="73.0" promptText="Username" />
+      <PasswordField fx:id="passwordText" layoutX="177.0" layoutY="110.0" promptText="Password" />
       <Label fx:id="userLocationLabel" alignment="CENTER" layoutX="2.0" layoutY="173.0" prefHeight="17.0" prefWidth="498.0" text="Error: Location not Found" textAlignment="CENTER" textOverrun="CLIP" wrapText="true" />
       <Button fx:id="logInButton" layoutX="223.0" layoutY="142.0" mnemonicParsing="false" onAction="#logInClicked" text="Log In" />
       <Label fx:id="infoIncorrect" alignment="CENTER" layoutY="190.0" prefHeight="17.0" prefWidth="498.0" textAlignment="CENTER" textOverrun="CLIP" />
-      <PasswordField fx:id="passwordText" layoutX="177.0" layoutY="110.0" promptText="Password" />
    </children>
 </Pane>

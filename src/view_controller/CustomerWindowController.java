@@ -1,7 +1,10 @@
 package view_controller;
 
 
+import DAO.AppointmentDAO;
 import DAO.CustomerDAO;
+import DAO.DBConnection;
+import DAO.DBQuery;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
@@ -9,9 +12,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import model.Appointment;
 import model.Customer;
-import DAO.DBConnection;
-import DAO.DBQuery;
-import utils.ObjectArrays;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -72,15 +72,10 @@ public class CustomerWindowController {
 
     @FXML
     public void initialize() throws SQLException {
-        populateCustomers();
         populateCustTable();
-        //populateAppointments();
-        //populateAppTable();
+        populateAppTable();
     }
 
-    private void populateCustomers() {
-
-    }
 
     private void populateCustTable() throws SQLException {
         FilteredList<Customer> customers = new FilteredList<>(CustomerDAO.getAllCustomers());
@@ -108,17 +103,17 @@ public class CustomerWindowController {
         //}
     }
 
-    private void populateAppTable(){
-        FilteredList<Appointment> appointments = new FilteredList<>(ObjectArrays.getAllAppointments());
+    private void populateAppTable() throws SQLException {
+        FilteredList<Appointment> appointments = new FilteredList<>(AppointmentDAO.getAllAppointments());
         appIDCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         appTitleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
         appDescCol.setCellValueFactory(new PropertyValueFactory<>("description"));
         appLocCol.setCellValueFactory(new PropertyValueFactory<>("location"));
-        appContCol.setCellValueFactory(new PropertyValueFactory<>("contact"));
+        appContCol.setCellValueFactory(new PropertyValueFactory<>("contactId"));
         appTypeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
-        appStartCol.setCellValueFactory(new PropertyValueFactory<>("startDate"));
-        appEndCol.setCellValueFactory(new PropertyValueFactory<>("endDate"));
-        appCustIdCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+        appStartCol.setCellValueFactory(new PropertyValueFactory<>("start"));
+        appEndCol.setCellValueFactory(new PropertyValueFactory<>("end"));
+        appCustIdCol.setCellValueFactory(new PropertyValueFactory<>("custId"));
 
         appTable.setItems(appointments);
     }
