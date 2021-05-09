@@ -3,7 +3,6 @@ package DAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.FLDivision;
-import utils.DBGenerics;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,11 +10,21 @@ import java.sql.SQLException;
 public class FLDivisionDAO {
 
     private static final String tableName = "first_level_divisions";
+    private static final String countryIdName = "COUNTRY_ID";
 
     public static ObservableList<FLDivision> getAllFLDivisions() throws SQLException {
         ObservableList<FLDivision> flDivisions = FXCollections.observableArrayList();
-        ResultSet rs = DBGenerics.queryAll(tableName);
+        ResultSet rs = DBQuery.selectAllFromTable(tableName);
         while (rs.next()) {
+            flDivisions.add(fillFLDivision(rs));
+        }
+        return flDivisions;
+    }
+
+    public static ObservableList<FLDivision> getFLDivisionsInCountry(int countryID) throws SQLException{
+        ObservableList<FLDivision> flDivisions = FXCollections.observableArrayList();
+        ResultSet rs = DBQuery.selectFromTable(countryIdName + " = " + countryID, tableName);
+        while (rs.next()){
             flDivisions.add(fillFLDivision(rs));
         }
         return flDivisions;

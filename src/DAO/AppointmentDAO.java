@@ -3,7 +3,6 @@ package DAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Appointment;
-import utils.DBGenerics;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,7 +13,7 @@ public class AppointmentDAO {
 
     public static ObservableList<Appointment> getAllAppointments() throws SQLException {
         ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
-        ResultSet rs = DBGenerics.queryAll(tableName);
+        ResultSet rs = DBQuery.selectAllFromTable(tableName);
         while(rs.next()){
             allAppointments.add(fillAppointments(rs));
         }
@@ -23,7 +22,7 @@ public class AppointmentDAO {
 
     private static Appointment fillAppointments(ResultSet rs) throws SQLException {
         Appointment appointment = new Appointment();
-        appointment.setId(rs.findColumn("Appointment_ID"));
+        appointment.setId(rs.getInt("Appointment_ID"));
         appointment.setTitle(rs.getString("Title"));
         appointment.setDescription(rs.getString("Description"));
         appointment.setLocation(rs.getString("Location"));

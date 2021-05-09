@@ -9,10 +9,5 @@ import java.sql.SQLException;
 
 public class DBGenerics {
 
-    public static ResultSet queryAll(String table) throws SQLException {
-        String getAllString = "SELECT * FROM " + table;
-        DBQuery.setPrepareStatement(DBConnection.getConnection(), getAllString);
-        PreparedStatement ps = DBQuery.getPrepareStatement();
-        return ps.executeQuery();
-    }
+    //public static ResultSet query
 }

@@ -3,7 +3,6 @@ package DAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Country;
-import utils.DBGenerics;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,7 +13,7 @@ public class CountryDAO {
 
     public static ObservableList<Country> getAllCountries() throws SQLException {
         ObservableList<Country> countries = FXCollections.observableArrayList();
-        ResultSet rs = DBGenerics.queryAll(tableName);
+        ResultSet rs = DBQuery.selectAllFromTable(tableName);
         while (rs.next()) {
             countries.add(fillCountry(rs));
         }

@@ -3,7 +3,6 @@ package DAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.User;
-import utils.DBGenerics;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,7 +13,7 @@ public class UserDAO {
 
     public static ObservableList<User> getAllUsers() throws SQLException {
         ObservableList<User> users = FXCollections.observableArrayList();
-        ResultSet rs = DBGenerics.queryAll(tableName);
+        ResultSet rs = DBQuery.selectAllFromTable(tableName);
         while (rs.next()) {
             users.add(fillUsers(rs));
         }

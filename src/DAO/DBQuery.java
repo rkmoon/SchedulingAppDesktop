@@ -2,6 +2,7 @@ package DAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class DBQuery {
@@ -16,23 +17,23 @@ public class DBQuery {
     }
 
 
-
-
-
-
-
-    /*public static boolean CheckLogIn(String username, String password){
-
-        String sql = "SELECT User_Name, Password FROM users WHERE User_Name='" + username + "' AND Password='" + password + "'";
-        try{
-            statement = conn.createStatement();
-            result = statement.executeQuery(sql);
-            return result.next();
+    public static ResultSet selectAllFromTable(String table) throws SQLException {
+        String getAllString;
+        if(table == "customers"){
+            getAllString = "select * from customers inner join first_level_divisions on customers.Division_ID = first_level_divisions.Division_ID left join countries on first_level_divisions.COUNTRY_ID = countries.Country_ID";
         }
-        catch (Exception e){
-            System.out.println(e.getMessage());
+        else {
+            getAllString = "SELECT * FROM " + table;
         }
+        setPrepareStatement(DBConnection.getConnection(), getAllString);
+        PreparedStatement ps = getPrepareStatement();
+        return ps.executeQuery();
+    }
 
-        return false;
-    }*/
+    public static ResultSet selectFromTable(String selection, String table) throws SQLException {
+        String getResults = "SELECT * FROM " + table + " WHERE " + selection;
+        setPrepareStatement(DBConnection.getConnection(), getResults);
+        PreparedStatement ps = getPrepareStatement();
+        return ps.executeQuery();
+    }
 }

@@ -3,19 +3,21 @@ package view_controller;
 
 import DAO.AppointmentDAO;
 import DAO.CustomerDAO;
-import DAO.DBConnection;
-import DAO.DBQuery;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import model.Appointment;
 import model.Customer;
 
+import java.io.IOException;
 import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class MainWindowController {
@@ -37,6 +39,12 @@ public class MainWindowController {
 
     @FXML
     private TableColumn<Customer, String> custPhoneCol;
+
+    @FXML
+    private TableColumn<Customer, String> custDivisionCol;
+
+    @FXML
+    private TableColumn<Customer, String> custCountryCol;
 
     @FXML
     private TableView<Appointment> appTable;
@@ -68,6 +76,25 @@ public class MainWindowController {
     @FXML
     private TableColumn<Appointment, Integer> appCustIdCol;
 
+    @FXML
+    private Button addCustomerButton;
+
+    @FXML
+    private Button updateCustomerButton;
+
+    @FXML
+    private Button deleteCustomerButton;
+
+    @FXML
+    private Button addAppButton;
+
+    @FXML
+    private Button updateAppButton;
+
+    @FXML
+    private Button deleteAppButton;
+
+
 
 
     @FXML
@@ -84,23 +111,9 @@ public class MainWindowController {
         custAddressCol.setCellValueFactory(new PropertyValueFactory<>("address"));
         custPostCol.setCellValueFactory(new PropertyValueFactory<>("postCode"));
         custPhoneCol.setCellValueFactory(new PropertyValueFactory<>("phoneNum"));
+        custCountryCol.setCellValueFactory(new PropertyValueFactory<>("country"));
+        custDivisionCol.setCellValueFactory(new PropertyValueFactory<>("division"));
         custTable.setItems(customers);
-    }
-
-    private void populateAppointments() throws SQLException{
-        String getAllAppString = "SELECT * FROM appointments";
-        DBQuery.setPrepareStatement(DBConnection.getConnection(), getAllAppString);
-        PreparedStatement ps = DBQuery.getPrepareStatement();
-        ResultSet rs = ps.executeQuery();
-        //while(rs.next()){
-            /*Appointment newAppointment = new Appointment(rs.getInt(1), rs.getString(2),
-                                                        rs.getString(3), rs.getString(4),
-                                                        rs.getString(14), rs.getString(5),
-                                                        rs.getDate(6), rs.getDate(7),
-                                                        rs.getInt(12));*/
-            //ObjectArrays.addAppointment(newAppointment);
-
-        //}
     }
 
     private void populateAppTable() throws SQLException {
@@ -116,6 +129,17 @@ public class MainWindowController {
         appCustIdCol.setCellValueFactory(new PropertyValueFactory<>("custId"));
 
         appTable.setItems(appointments);
+    }
+
+    @FXML
+    public void openAddCustomerWindow() throws IOException {
+        Stage stage = new Stage();
+        Parent root = FXMLLoader.load(getClass().getResource("AddCustomerWindow.fxml"));
+
+        Scene scene = new Scene(root);
+        stage.setTitle("Add Customer Window");
+        stage.setScene(scene);
+        stage.show();
     }
 
 }

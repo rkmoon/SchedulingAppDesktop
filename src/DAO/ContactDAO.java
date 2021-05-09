@@ -3,7 +3,6 @@ package DAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Contact;
-import utils.DBGenerics;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,7 +13,7 @@ public class ContactDAO {
 
     public static ObservableList<Contact> getAllContacts() throws SQLException {
         ObservableList<Contact> contacts = FXCollections.observableArrayList();
-        ResultSet rs = DBGenerics.queryAll(tableName);
+        ResultSet rs = DBQuery.selectAllFromTable(tableName);
         while(rs.next()){
             contacts.add(fillContact(rs));
         }
