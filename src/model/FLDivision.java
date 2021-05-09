@@ -2,7 +2,7 @@ package model;
 
 import java.sql.Timestamp;
 
-public class FLDivisions {
+public class FLDivision {
 
     private int divisionID;
     private String division;
@@ -12,9 +12,9 @@ public class FLDivisions {
     private String lastUpdatedBy;
     private int countryID;
 
-    public FLDivisions(){}
-    public FLDivisions(int divisionID, String division, Timestamp createDate, String createdBy, Timestamp lastUpdate,
-                       String lastUpdatedBy, int countryID) {
+    public FLDivision(){}
+    public FLDivision(int divisionID, String division, Timestamp createDate, String createdBy, Timestamp lastUpdate,
+                      String lastUpdatedBy, int countryID) {
         this.divisionID = divisionID;
         this.division = division;
         this.createDate = createDate;

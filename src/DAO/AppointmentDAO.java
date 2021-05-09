@@ -21,7 +21,7 @@ public class AppointmentDAO {
         return allAppointments;
     }
 
-    public static Appointment fillAppointments(ResultSet rs) throws SQLException {
+    private static Appointment fillAppointments(ResultSet rs) throws SQLException {
         Appointment appointment = new Appointment();
         appointment.setId(rs.findColumn("Appointment_ID"));
         appointment.setTitle(rs.getString("Title"));

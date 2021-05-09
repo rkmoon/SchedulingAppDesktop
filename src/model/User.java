@@ -2,40 +2,50 @@ package model;
 
 import java.sql.Timestamp;
 
-public class Country {
-    private int countryID;
-    private String country;
+public class User {
+
+    private int userID;
+    private String username;
+    private String password;
     private Timestamp createDate;
     private String createdBy;
     private Timestamp lastUpdate;
     private String lastUpdatedBy;
 
-    public Country(){}
 
-    public Country(int countryID, String country, Timestamp createDate, String createdBy, Timestamp lastUpdate, String lastUpdatedBy) {
-        this.countryID = countryID;
-        this.country = country;
+    public User(){}
+    public User(int userID, String username, String password, Timestamp createDate, String createdBy, Timestamp lastUpdate, String lastUpdatedBy) {
+        this.userID = userID;
+        this.username = username;
+        this.password = password;
         this.createDate = createDate;
         this.createdBy = createdBy;
         this.lastUpdate = lastUpdate;
         this.lastUpdatedBy = lastUpdatedBy;
     }
 
-
-    public int getCountryID() {
-        return countryID;
+    public int getUserID() {
+        return userID;
     }
 
-    public void setCountryID(int countryID) {
-        this.countryID = countryID;
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 
-    public String getCountry() {
-        return country;
+    public String getUsername() {
+        return username;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Timestamp getCreateDate() {

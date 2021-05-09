@@ -1,11 +1,13 @@
 package SchedulingApplication;
 
+import DAO.*;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import DAO.DBConnection;
+
+import java.sql.SQLException;
 
 public class Main extends Application {
 
@@ -20,8 +22,15 @@ public class Main extends Application {
     }
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         DBConnection.startConnection();
+        AppointmentDAO.getAllAppointments();
+        ContactDAO.getAllContacts();
+        CountryDAO.getAllCountries();
+        CustomerDAO.getAllCustomers();
+        FLDivisionDAO.getAllFLDivisions();
+        UserDAO.getAllUsers();
+
         launch(args);
     }
 }
