@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class MainWindowController {
 
@@ -21,7 +22,7 @@ public class MainWindowController {
     @FXML
     public void goToCustomers() throws IOException {
         Stage stage = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("CustomerWindow.fxml"));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("CustomerViewWindow.fxml")));
 
         Scene scene = new Scene(root);
         stage.setTitle("Customers");
@@ -33,7 +34,7 @@ public class MainWindowController {
     @FXML
     public void goToAppointments() throws IOException {
         Stage stage = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("AppointmentWindow.fxml"));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("AppointmentWindow.fxml")));
 
         Scene scene = new Scene(root);
         stage.setTitle("Appointments");

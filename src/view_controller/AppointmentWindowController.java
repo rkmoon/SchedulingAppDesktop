@@ -16,7 +16,7 @@ import model.Appointment;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
-
+import java.util.Objects;
 
 
 public class AppointmentWindowController {
@@ -86,7 +86,7 @@ public class AppointmentWindowController {
 
     public void goToCustomers() throws IOException {
         Stage stage = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("CustomerWindow.fxml"));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("CustomerViewWindow.fxml")));
 
         Scene scene = new Scene(root);
         stage.setTitle("Customers");

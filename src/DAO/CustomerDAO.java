@@ -24,7 +24,7 @@ public class CustomerDAO {
     }
 
     public static Customer findCustomer(int id) throws Exception {
-        Customer customerToFind = new Customer();
+        Customer customerToFind;
         ResultSet rs = DBQuery.selectFromTable(custIdName + " = " + id, tableName);
 
         if(!rs.next()){
@@ -62,9 +62,8 @@ public class CustomerDAO {
     }
 
     public static void updateCustomer(Customer customer) throws SQLException{
-        String updateString = "UPDATE customers set(Customer_Name, Address, Postal_Code, Phone, Last_Update, " +
-                                                    "Last_Updated_By, Division_ID) " +
-                                                    "VALUES(?,?,?,?, now(), 'test', ?)";
+        String updateString = "UPDATE customers set Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, Last_Update = now()," +
+                                                    "Last_Updated_By = 'test', Division_ID = ? where (Customer_ID = ?)";
         DBQuery.setPrepareStatement(DBConnection.getConnection(), updateString);
         PreparedStatement ps = DBQuery.getPrepareStatement();
 
@@ -73,6 +72,9 @@ public class CustomerDAO {
         ps.setString(3, customer.getPostCode());
         ps.setString(4, customer.getPhoneNum());
         ps.setInt(5,customer.getDivID());
+        ps.setInt(6,customer.getId());
+
+        ps.execute();
     }
 
     private static Customer fillCustomer(ResultSet rs) throws SQLException {
