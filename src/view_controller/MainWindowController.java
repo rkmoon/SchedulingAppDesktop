@@ -34,7 +34,7 @@ public class MainWindowController {
     @FXML
     public void goToAppointments() throws IOException {
         Stage stage = new Stage();
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("AppointmentWindow.fxml")));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("AppointmentViewWindow.fxml")));
 
         Scene scene = new Scene(root);
         stage.setTitle("Appointments");

@@ -1,102 +1,164 @@
 package view_controller;
 
 import DAO.AppointmentDAO;
-import javafx.collections.transformation.FilteredList;
+import DAO.ContactDAO;
+import DAO.CustomerDAO;
+import DAO.UserDAO;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.Appointment;
+import model.Contact;
+import model.Customer;
+import model.User;
 
-import java.io.IOException;
-import java.sql.Date;
 import java.sql.SQLException;
-import java.util.Objects;
-
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.Month;
 
 public class AppointmentWindowController {
 
     @FXML
-    private TableView<Appointment> appTable;
+    private TextField appIdText;
 
     @FXML
-    private TableColumn<Appointment, Integer> appIDCol;
+    private TextField titleText;
 
     @FXML
-    private TableColumn<Appointment, String> appTitleCol;
+    private TextField descriptionText;
 
     @FXML
-    private TableColumn<Appointment, String> appDescCol;
+    private TextField locationText;
 
     @FXML
-    private TableColumn<Appointment, String> appLocCol;
+    private ComboBox<Contact> contactBox;
 
     @FXML
-    private TableColumn<Appointment, String> appContCol;
+    private DatePicker startDate;
 
     @FXML
-    private TableColumn<Appointment, String> appTypeCol;
+    private ComboBox<String> startHourTime;
 
     @FXML
-    private TableColumn<Appointment, Date> appStartCol;
+    private ComboBox<String> startMinuteTime;
 
     @FXML
-    private TableColumn<Appointment, Date> appEndCol;
+    private DatePicker endDate;
 
     @FXML
-    private TableColumn<Appointment, Integer> appCustIdCol;
+    private ComboBox<String> endHourTime;
 
     @FXML
-    private Button addAppButton;
+    private ComboBox<String> endMinuteTime;
 
     @FXML
-    private Button updateAppButton;
+    private ComboBox<Customer> customerBox;
 
     @FXML
-    private Button deleteAppButton;
+    private ComboBox<User> userBox;
 
     @FXML
-    private Button custButton;
+    private Button confirmButton;
+
+    @FXML
+    private Button cancelButton;
 
 
+    @FXML
     public void initialize() throws SQLException {
-        populateAppTable();
+        fillComboBoxes();
+        setNewAppointmentID();
     }
-
-
-    private void populateAppTable() throws SQLException {
-        FilteredList<Appointment> appointments = new FilteredList<>(AppointmentDAO.getAllAppointments());
-        appIDCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-        appTitleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
-        appDescCol.setCellValueFactory(new PropertyValueFactory<>("description"));
-        appLocCol.setCellValueFactory(new PropertyValueFactory<>("location"));
-        appContCol.setCellValueFactory(new PropertyValueFactory<>("contactId"));
-        appTypeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
-        appStartCol.setCellValueFactory(new PropertyValueFactory<>("start"));
-        appEndCol.setCellValueFactory(new PropertyValueFactory<>("end"));
-        appCustIdCol.setCellValueFactory(new PropertyValueFactory<>("custId"));
-
-        appTable.setItems(appointments);
-    }
-
-    public void goToCustomers() throws IOException {
-        Stage stage = new Stage();
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("CustomerViewWindow.fxml")));
-
-        Scene scene = new Scene(root);
-        stage.setTitle("Customers");
-        stage.setScene(scene);
-        stage.show();
+    @FXML
+    void onCancelButton() {
         closeWindow();
     }
 
-    private void closeWindow(){
-        Stage stage = (Stage) custButton.getScene().getWindow();
-        stage.close();
+    @FXML
+    void onConfirmButton() {
+
     }
+
+    private void closeWindow(){
+            Stage stage = (Stage) cancelButton.getScene().getWindow();
+            stage.close();
+    }
+
+    private void fillComboBoxes() throws SQLException {
+        fillContactBox();
+        fillCustomerBox();
+        fillUserBox();
+        fillHoursBox(startHourTime);
+        fillHoursBox(endHourTime);
+        fillMinutesBox(startMinuteTime);
+        fillMinutesBox(endMinuteTime);
+    }
+
+    private Appointment createAppointment(){
+        Appointment newAppointment = new Appointment();
+        newAppointment.setId(Integer.parseInt(appIdText.getText()));
+        newAppointment.setTitle(titleText.getText());
+        newAppointment.setDescription(descriptionText.getText());
+        newAppointment.setLocation(locationText.getText());
+        newAppointment.setContactId(contactBox.getValue().getContactID());
+        newAppointment.setStart(convertStartToTimestamp());
+        newAppointment.setEnd(convertEndToTimestamp());
+        newAppointment.setCustId(customerBox.getValue().getId());
+        newAppointment.setUserId(userBox.getValue().getUserID());
+        return newAppointment;
+    }
+
+    private void fillUserBox() throws SQLException {
+        userBox.setItems(UserDAO.getAllUsers());
+    }
+
+    private void fillContactBox() throws SQLException {
+        contactBox.setItems(ContactDAO.getAllContacts());
+    }
+
+    private void fillCustomerBox() throws SQLException {
+        customerBox.setItems(CustomerDAO.getAllCustomers());
+    }
+
+    private void fillHoursBox(ComboBox<String> comboBox){
+        for(int i = 0; i < 24; i++){
+            comboBox.getItems().add(String.valueOf(i));
+        }
+    }
+
+    private void fillMinutesBox(ComboBox<String> comboBox){
+        for (int i = 0; i < 60; i += 15){
+            comboBox.getItems().add(String.valueOf(i));
+        }
+    }
+
+    private Timestamp convertStartToTimestamp(){
+        Timestamp timestamp = null;
+        LocalDateTime startTime = null;
+        int year = startDate.getValue().getYear();
+        Month month = startDate.getValue().getMonth();
+        int day = startDate.getValue().getDayOfMonth();
+        //LocalDateTime dateTime = startTime.of(year, month, day, startHourTime.getValue(), startMinuteTime.getValue());
+
+        return timestamp;
+    }
+
+    private Timestamp convertEndToTimestamp(){
+        Timestamp timestamp = null;
+        return timestamp;
+    }
+
+    //lambda expression to sort appointment ids in descending order for highest ID+1 to make sure it is unique
+    private void setNewAppointmentID() throws SQLException {
+        ObservableList<Appointment> appointments = AppointmentDAO.getAllAppointments();
+        appointments.sort(((o1, o2) -> (o2.getId() - o1.getId())));
+        int newAppointmentID = appointments.get(0).getId() + 1;
+        appIdText.setText(String.valueOf(newAppointmentID));
+    }
+
 }

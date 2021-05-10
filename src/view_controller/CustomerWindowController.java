@@ -139,7 +139,7 @@ public class CustomerWindowController {
     }
 
 
-    // This is where the lambda expression is, it is used to sort the customers descending by their ID and then add 1
+    // Lambda expression, it is used to sort the customers descending by their ID and then add 1
     // to the greatest ID to ensure uniqueness
     private void setNewCustomerID() throws SQLException {
         ObservableList<Customer> customers = CustomerDAO.getAllCustomers();
@@ -157,6 +157,7 @@ public class CustomerWindowController {
         this.customerToUpdate = customerToUpdate;
     }
 
+    //Lambda expressions used here to search the lists for corresponding IDs
     private void setCountryBoxToDivision(int divID) throws SQLException {
         ObservableList<Country> countries = countryBox.getItems();
         ObservableList<FLDivision> flDivisions = FLDivisionDAO.getAllFLDivisions();
@@ -173,6 +174,7 @@ public class CustomerWindowController {
         }));
     }
 
+    //Lambdas used here to search for corresponding IDs
     private void setDivisionBox(int divID) throws SQLException {
         ObservableList<FLDivision> flDivisions = FLDivisionDAO.getFLDivisionsInCountry(countryBox.getValue().getCountryID());
         flDivisions.forEach(flDivision -> {
