@@ -3,6 +3,7 @@ package DAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Customer;
+import utils.LoggedInUser;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -40,7 +41,7 @@ public class CustomerDAO {
     public static void insertCustomer(Customer customer) throws SQLException {
         String insertString = "INSERT INTO customers (Customer_ID, Customer_Name, Address, Postal_Code, Phone, " +
                                                     "Create_Date, Created_By, Last_Update, Last_Updated_By, Division_ID)" +
-                                                    " VALUES(?,?,?,?,?,now(),'test',now(),'test',?)";
+                                                    " VALUES(?,?,?,?,?,now(),?,now(),?,?)";
         DBQuery.setPrepareStatement(DBConnection.getConnection(),insertString);
         PreparedStatement ps = DBQuery.getPrepareStatement();
 
@@ -49,7 +50,9 @@ public class CustomerDAO {
         ps.setString(3, customer.getAddress());
         ps.setString(4, customer.getPostCode());
         ps.setString(5, customer.getPhoneNum());
-        ps.setInt(6, customer.getDivID());
+        ps.setString(6, LoggedInUser.getUserName());
+        ps.setString(7, LoggedInUser.getUserName());
+        ps.setInt(8, customer.getDivID());
         ps.execute();
     }
 
@@ -63,7 +66,7 @@ public class CustomerDAO {
 
     public static void updateCustomer(Customer customer) throws SQLException{
         String updateString = "UPDATE customers set Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, Last_Update = now()," +
-                                                    "Last_Updated_By = 'test', Division_ID = ? where (Customer_ID = ?)";
+                                                    "Last_Updated_By = ?, Division_ID = ? where (Customer_ID = ?)";
         DBQuery.setPrepareStatement(DBConnection.getConnection(), updateString);
         PreparedStatement ps = DBQuery.getPrepareStatement();
 
@@ -71,8 +74,9 @@ public class CustomerDAO {
         ps.setString(2, customer.getAddress());
         ps.setString(3, customer.getPostCode());
         ps.setString(4, customer.getPhoneNum());
-        ps.setInt(5,customer.getDivID());
-        ps.setInt(6,customer.getId());
+        ps.setString(5,LoggedInUser.getUserName());
+        ps.setInt(6,customer.getDivID());
+        ps.setInt(7,customer.getId());
 
         ps.execute();
     }

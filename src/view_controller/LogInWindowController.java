@@ -1,5 +1,6 @@
 package view_controller;
 
+import DAO.UserDAO;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,6 +11,8 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import DAO.DBConnection;
 import DAO.DBQuery;
+import model.User;
+import utils.LoggedInUser;
 
 import java.io.IOException;
 import java.sql.PreparedStatement;
@@ -90,6 +93,12 @@ public class LogInWindowController {
             ps.setString(2, passwordText.getText());
             ResultSet rs = ps.executeQuery();
             isCorrect = rs.next();
+            if(isCorrect){
+                User loggedIn;
+                loggedIn = UserDAO.getUser(usernameText.getText());
+                LoggedInUser.setLoggedIn(loggedIn);
+                System.out.println(loggedIn.getUsername());
+            }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

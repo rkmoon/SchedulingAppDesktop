@@ -3,7 +3,9 @@ package DAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Appointment;
+import utils.LoggedInUser;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -37,5 +39,29 @@ public class AppointmentDAO {
         appointment.setUserId(rs.getInt("User_ID"));
         appointment.setContactId(rs.getInt("Contact_ID"));
         return appointment;
+    }
+
+    public static void insertAppointment(Appointment appointment) throws SQLException {
+        String insertString = "INSERT INTO appointments (`Appointment_ID`, `Title`, `Description`, `Location`, `Type`, " +
+                "`Start`, `End`, `Create_Date`, `Created_By`, `Last_Update`, `Last_Updated_By`, `Customer_ID`, " +
+                "`User_ID`, `Contact_ID`)" +
+                " VALUES(?,?,?,?,?,?,?,now(), ?, now(), ?,?,?,?)";
+        DBQuery.setPrepareStatement(DBConnection.getConnection(),insertString);
+        PreparedStatement ps = DBQuery.getPrepareStatement();
+
+        ps.setInt(1, appointment.getId());
+        ps.setString(2, appointment.getTitle());
+        ps.setString(3, appointment.getDescription());
+        ps.setString(4, appointment.getLocation());
+        ps.setString(5, appointment.getType());
+        ps.setTimestamp(6, appointment.getStart());
+        ps.setTimestamp(7,appointment.getEnd());
+        ps.setString(8, LoggedInUser.getUserName());
+        ps.setString(9, LoggedInUser.getUserName());
+        ps.setInt(10, appointment.getCustId());
+        ps.setInt(11, appointment.getUserId());
+        ps.setInt(12, appointment.getContactId());
+
+        ps.execute();
     }
 }

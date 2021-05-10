@@ -20,7 +20,7 @@ public class UserDAO {
         return users;
     }
 
-    private static User fillUsers(ResultSet rs) throws SQLException {
+    public static User fillUsers(ResultSet rs) throws SQLException {
         User user = new User();
         user.setUserID(rs.getInt("User_ID"));
         user.setUsername(rs.getString("User_Name"));
@@ -30,5 +30,11 @@ public class UserDAO {
         user.setLastUpdate(rs.getTimestamp("Last_Update"));
         user.setLastUpdatedBy(rs.getString("Last_Updated_By"));
         return user;
+    }
+
+    public static User getUser(String username) throws SQLException {
+        ResultSet rs = DBQuery.selectFromTable("User_Name = '" + username + "'", tableName);
+        rs.next();
+        return fillUsers(rs);
     }
 }

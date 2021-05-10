@@ -3,7 +3,6 @@ package view_controller;
 import DAO.AppointmentDAO;
 import DAO.ContactDAO;
 import DAO.CustomerDAO;
-import DAO.UserDAO;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -14,7 +13,7 @@ import javafx.stage.Stage;
 import model.Appointment;
 import model.Contact;
 import model.Customer;
-import model.User;
+import utils.LoggedInUser;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -34,6 +33,9 @@ public class AppointmentWindowController {
 
     @FXML
     private TextField locationText;
+
+    @FXML
+    private TextField typeText;
 
     @FXML
     private ComboBox<Contact> contactBox;
@@ -60,9 +62,6 @@ public class AppointmentWindowController {
     private ComboBox<Customer> customerBox;
 
     @FXML
-    private ComboBox<User> userBox;
-
-    @FXML
     private Button confirmButton;
 
     @FXML
@@ -80,8 +79,8 @@ public class AppointmentWindowController {
     }
 
     @FXML
-    void onConfirmButton() {
-
+    void onConfirmButton() throws SQLException {
+        AppointmentDAO.insertAppointment(createAppointment());
     }
 
     private void closeWindow(){
@@ -92,7 +91,6 @@ public class AppointmentWindowController {
     private void fillComboBoxes() throws SQLException {
         fillContactBox();
         fillCustomerBox();
-        fillUserBox();
         fillHoursBox(startHourTime);
         fillHoursBox(endHourTime);
         fillMinutesBox(startMinuteTime);
@@ -105,17 +103,15 @@ public class AppointmentWindowController {
         newAppointment.setTitle(titleText.getText());
         newAppointment.setDescription(descriptionText.getText());
         newAppointment.setLocation(locationText.getText());
+        newAppointment.setType(typeText.getText());
         newAppointment.setContactId(contactBox.getValue().getContactID());
-        newAppointment.setStart(convertStartToTimestamp());
-        newAppointment.setEnd(convertEndToTimestamp());
+        newAppointment.setStart(dateAndTimeToTimestamp(startDate,startHourTime,startMinuteTime));
+        newAppointment.setEnd(dateAndTimeToTimestamp(endDate,endHourTime,endMinuteTime));
         newAppointment.setCustId(customerBox.getValue().getId());
-        newAppointment.setUserId(userBox.getValue().getUserID());
+        newAppointment.setUserId(LoggedInUser.getLoggedIn().getUserID());
         return newAppointment;
     }
 
-    private void fillUserBox() throws SQLException {
-        userBox.setItems(UserDAO.getAllUsers());
-    }
 
     private void fillContactBox() throws SQLException {
         contactBox.setItems(ContactDAO.getAllContacts());
@@ -137,21 +133,18 @@ public class AppointmentWindowController {
         }
     }
 
-    private Timestamp convertStartToTimestamp(){
+    private Timestamp dateAndTimeToTimestamp(DatePicker date, ComboBox<String> hourBox, ComboBox<String> minuteBox){
         Timestamp timestamp = null;
-        LocalDateTime startTime = null;
-        int year = startDate.getValue().getYear();
-        Month month = startDate.getValue().getMonth();
-        int day = startDate.getValue().getDayOfMonth();
-        //LocalDateTime dateTime = startTime.of(year, month, day, startHourTime.getValue(), startMinuteTime.getValue());
-
+        int year = date.getValue().getYear();
+        Month month = date.getValue().getMonth();
+        int day = date.getValue().getDayOfMonth();
+        int hour = Integer.parseInt(hourBox.getValue());
+        int minute = Integer.parseInt(minuteBox.getValue());
+        LocalDateTime startTime = LocalDateTime.of(year, month, day, hour, minute);
+        timestamp = Timestamp.valueOf(startTime);
         return timestamp;
     }
 
-    private Timestamp convertEndToTimestamp(){
-        Timestamp timestamp = null;
-        return timestamp;
-    }
 
     //lambda expression to sort appointment ids in descending order for highest ID+1 to make sure it is unique
     private void setNewAppointmentID() throws SQLException {
