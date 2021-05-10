@@ -73,7 +73,7 @@ public class LogInWindowController {
         Parent root = FXMLLoader.load(getClass().getResource("MainWindow.fxml"));
 
         Scene scene = new Scene(root);
-        stage.setTitle("Scheduling App");
+        stage.setTitle("Choose an Option");
         stage.setScene(scene);
         stage.show();
     }

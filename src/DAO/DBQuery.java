@@ -20,7 +20,9 @@ public class DBQuery {
     public static ResultSet selectAllFromTable(String table) throws SQLException {
         String getAllString;
         if(table == "customers"){
-            getAllString = "select * from customers inner join first_level_divisions on customers.Division_ID = first_level_divisions.Division_ID left join countries on first_level_divisions.COUNTRY_ID = countries.Country_ID";
+            getAllString = "select * from customers inner join first_level_divisions on " +
+                    "customers.Division_ID = first_level_divisions.Division_ID " +
+                    "left join countries on first_level_divisions.COUNTRY_ID = countries.Country_ID";
         }
         else {
             getAllString = "SELECT * FROM " + table;

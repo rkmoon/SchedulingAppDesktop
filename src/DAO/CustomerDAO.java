@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Customer;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -36,8 +37,42 @@ public class CustomerDAO {
 
     }
 
-    public static void insertCustomer(Customer customer){
+    public static void insertCustomer(Customer customer) throws SQLException {
+        String insertString = "INSERT INTO customers (Customer_ID, Customer_Name, Address, Postal_Code, Phone, " +
+                                                    "Create_Date, Created_By, Last_Update, Last_Updated_By, Division_ID)" +
+                                                    " VALUES(?,?,?,?,?,now(),'test',now(),'test',?)";
+        DBQuery.setPrepareStatement(DBConnection.getConnection(),insertString);
+        PreparedStatement ps = DBQuery.getPrepareStatement();
 
+        ps.setInt(1, customer.getId());
+        ps.setString(2, customer.getName());
+        ps.setString(3, customer.getAddress());
+        ps.setString(4, customer.getPostCode());
+        ps.setString(5, customer.getPhoneNum());
+        ps.setInt(6, customer.getDivID());
+        ps.execute();
+    }
+
+    public static void deleteCustomer(Customer customer) throws SQLException {
+        String deleteString = "DELETE FROM customers WHERE (Customer_ID = " + customer.getId() + ")";
+        //System.out.println(deleteString);
+        DBQuery.setPrepareStatement(DBConnection.getConnection(), deleteString);
+        PreparedStatement ps = DBQuery.getPrepareStatement();
+        ps.execute();
+    }
+
+    public static void updateCustomer(Customer customer) throws SQLException{
+        String updateString = "UPDATE customers set(Customer_Name, Address, Postal_Code, Phone, Last_Update, " +
+                                                    "Last_Updated_By, Division_ID) " +
+                                                    "VALUES(?,?,?,?, now(), 'test', ?)";
+        DBQuery.setPrepareStatement(DBConnection.getConnection(), updateString);
+        PreparedStatement ps = DBQuery.getPrepareStatement();
+
+        ps.setString(1,customer.getName());
+        ps.setString(2, customer.getAddress());
+        ps.setString(3, customer.getPostCode());
+        ps.setString(4, customer.getPhoneNum());
+        ps.setInt(5,customer.getDivID());
     }
 
     private static Customer fillCustomer(ResultSet rs) throws SQLException {

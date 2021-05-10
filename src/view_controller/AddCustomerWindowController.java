@@ -45,10 +45,13 @@ public class AddCustomerWindowController {
     @FXML
     private Button cancelButton;
 
+    private CustomerWindowController customerWindowController;
+    private boolean isUpdateCustomer;
+
     public void initialize() throws SQLException {
         countryBox.setItems(CountryDAO.getAllCountries());
         setNewCustomerID();
-
+        //customerWindowController
     }
 
     @FXML
@@ -60,19 +63,54 @@ public class AddCustomerWindowController {
     }
 
     @FXML
-    public void onConfirmButton() {
-
+    public void onCancelButton(){
         closeWindow();
     }
 
     @FXML
-    public void onCancelButton(){
-        closeWindow();
+    public void onConfirmButton() throws SQLException {
+        if(checkFields()) {
+            createCustomer();
+            customerWindowController.updateTable();
+            closeWindow();
+        }
+        else{
+            // Add error message
+            System.out.println("Form not complete");
+        }
+    }
+
+    private boolean checkFields(){
+        boolean formsComplete;
+        if(customerIdText.getText().isEmpty() || nameText.getText().isEmpty() || addressText.getText().isEmpty() ||
+                postText.getText().isEmpty() || phoneText.getText().isEmpty() || fldBox.getValue() == null){
+            formsComplete = false;
+        }
+        else {
+            formsComplete = true;
+        }
+
+        return formsComplete;
+    }
+
+    private void createCustomer() throws SQLException {
+        Customer newCustomer = new Customer();
+        newCustomer.setId(Integer.parseInt(customerIdText.getText()));
+        newCustomer.setName(nameText.getText());
+        newCustomer.setAddress(addressText.getText());
+        newCustomer.setPostCode(postText.getText());
+        newCustomer.setPhoneNum(phoneText.getText());
+        newCustomer.setDivID(fldBox.getValue().getDivisionID());
+        CustomerDAO.insertCustomer(newCustomer);
     }
 
     private void closeWindow(){
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
+    }
+
+    public void getMainWindowInstance(CustomerWindowController controller){
+        this.customerWindowController = controller;
     }
 
 
@@ -86,4 +124,7 @@ public class AddCustomerWindowController {
 
     }
 
+    public void setUpdateCustomer(boolean updateCustomer) {
+        isUpdateCustomer = updateCustomer;
+    }
 }
