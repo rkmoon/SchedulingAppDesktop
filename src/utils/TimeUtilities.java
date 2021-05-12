@@ -44,4 +44,8 @@ public class TimeUtilities {
         LocalTime localTime = LocalTime.of(convertedTime.getHour(), convertedTime.getMinute());
         return localTime.isAfter(closeTime);
     }
+
+    public static boolean isOverlapping(LocalDateTime start1, LocalDateTime start2, LocalDateTime end1, LocalDateTime end2){
+        return start1.isBefore(end2) && start2.isBefore(end1);
+    }
 }

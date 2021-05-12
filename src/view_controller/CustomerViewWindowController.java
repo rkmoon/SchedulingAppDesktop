@@ -1,22 +1,33 @@
 package view_controller;
 
 
+import DAO.AppointmentDAO;
 import DAO.CustomerDAO;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import model.Appointment;
 import model.Customer;
+import utils.LoggedInUser;
+import utils.TimeUtilities;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CustomerViewWindowController {
 
@@ -59,10 +70,20 @@ public class CustomerViewWindowController {
     @FXML
     private Button appointmentButton;
 
+    @FXML
+    private Label appointmentAlertLabel;
+
+    @FXML
+    private Label appointmentInfoLabel;
+
+    @FXML
+    private Label appointmentTimeLabel;
+
 
     @FXML
     public void initialize() throws SQLException {
         populateCustTable();
+        checkForAppointments();
 
     }
 
@@ -152,6 +173,10 @@ public class CustomerViewWindowController {
             System.out.println("No Customer Selected");
             //ADD ERROR BOX
         }
+        else if(checkForAppointments(custToDelete)){
+            System.out.println("Customer has appointments");
+            //ADD ERROR BOX
+        }
         else {
             //ADD CONFIRMATION BOX
             CustomerDAO.deleteCustomer(custToDelete);
@@ -161,11 +186,54 @@ public class CustomerViewWindowController {
 
     public void updateTable() throws SQLException {
         populateCustTable();
+        checkForAppointments();
     }
 
     private void closeWindow(){
         Stage stage = (Stage) appointmentButton.getScene().getWindow();
         stage.close();
     }
+
+    private void checkForAppointments() throws SQLException {
+        ObservableList<Appointment> appointments = AppointmentDAO.getAllAppointments();
+        ObservableList<Appointment> userAppointments = FXCollections.observableArrayList();
+        LocalDateTime nowTime = LocalDateTime.now();
+        appointments.forEach(appointment -> {
+            if(LoggedInUser.getUserID() == appointment.getUserId()){
+                userAppointments.add(appointment);
+            }
+        });
+        userAppointments.forEach(appointment -> {
+            LocalDateTime appointmentTime = appointment.getStart().toLocalDateTime();
+            appointmentTime = TimeUtilities.utcToLocal(appointmentTime);
+            double timeUntil = nowTime.until(appointmentTime, ChronoUnit.MINUTES);
+            if(timeUntil < 15 && timeUntil > 0){
+                alertAboutAppointment(appointment, timeUntil, appointmentTime);
+            }
+        });
+    }
+
+    private void alertAboutAppointment(Appointment appointment, double time, LocalDateTime appointmentTime){
+        appointmentAlertLabel.setText("You have an appointment in " + (int)time + " minutes");
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("EEEE, MMM dd, yyyy h:mm a");
+        appointmentInfoLabel.setText("ID: " + appointment.getId());
+        appointmentTimeLabel.setText("Start Time: " + appointmentTime.format(format));
+    }
+
+    private boolean checkForAppointments(Customer customer) throws SQLException {
+        AtomicBoolean hasAppointments = new AtomicBoolean(false);
+        ObservableList<Appointment> appointments = AppointmentDAO.getAllAppointments();
+        appointments.forEach(appointment -> {
+            if(customer.getId() == appointment.getCustId()){
+                hasAppointments.set(true);
+            }
+            else{
+                hasAppointments.set(false);
+            }
+        });
+        return hasAppointments.get();
+    }
+
+
 
 }

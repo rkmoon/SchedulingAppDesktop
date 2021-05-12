@@ -18,6 +18,7 @@ public class Appointment {
     private int custId;
     private int userId;
     private int contactId;
+    private String contactName;
 
     public Appointment(){}
     public Appointment(int id, String title, String description, String location, String type, Timestamp start,
@@ -150,4 +151,12 @@ public class Appointment {
     public void setContactId(int contactId) {
         this.contactId = contactId;
     }
+    public String getContactName() {
+        return contactName;
+    }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
+
 }

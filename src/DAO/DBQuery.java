@@ -24,6 +24,10 @@ public class DBQuery {
                     "customers.Division_ID = first_level_divisions.Division_ID " +
                     "left join countries on first_level_divisions.COUNTRY_ID = countries.Country_ID";
         }
+        else if(table == "appointments"){
+            getAllString = "select * from appointments inner join contacts on " +
+                    "appointments.Contact_ID = contacts.Contact_ID";
+        }
         else {
             getAllString = "SELECT * FROM " + table;
         }

@@ -38,6 +38,7 @@ public class AppointmentDAO {
         appointment.setCustId(rs.getInt("Customer_ID"));
         appointment.setUserId(rs.getInt("User_ID"));
         appointment.setContactId(rs.getInt("Contact_ID"));
+        appointment.setContactName(rs.getString("Contact_Name"));
         return appointment;
     }
 
@@ -65,9 +66,13 @@ public class AppointmentDAO {
         ps.execute();
     }
 
+    public static void updateAppointment() throws SQLException {
+        updateAppointment();
+    }
+
     public static void updateAppointment(Appointment appointment) throws SQLException{
-        String updateString = "UPDATE customers set Title = ?, Description = ?, Location = ?, Type = ?, " +
-                "Start = ?, End = ?, Last_Update = now(), Last_Updated_By = ?" +
+        String updateString = "UPDATE appointments set Title = ?, Description = ?, Location = ?, Type = ?, " +
+                "Start = ?, End = ?, Last_Update = now(), Last_Updated_By = ?," +
                 "Customer_ID = ?, User_ID = ?, Contact_ID = ? where (Appointment_ID = ?)";
         DBQuery.setPrepareStatement(DBConnection.getConnection(),updateString);
         PreparedStatement ps = DBQuery.getPrepareStatement();
@@ -82,6 +87,8 @@ public class AppointmentDAO {
         ps.setInt(8, appointment.getCustId());
         ps.setInt(9, appointment.getUserId());
         ps.setInt(10, appointment.getContactId());
+        ps.setInt(11, appointment.getId());
+        System.out.println(ps.toString());
 
         ps.execute();
     }

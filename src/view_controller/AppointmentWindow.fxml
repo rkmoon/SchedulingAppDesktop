@@ -58,17 +58,12 @@
                               <Insets top="20.0" />
                            </VBox.margin>
                         </Label>
-                        <Label layoutX="29.0" layoutY="141.0" text="Start Date">
+                        <Label layoutX="29.0" layoutY="141.0" text="Date">
                            <VBox.margin>
                               <Insets top="20.0" />
                            </VBox.margin>
                         </Label>
                         <Label layoutX="29.0" layoutY="158.0" text="Start Time">
-                           <VBox.margin>
-                              <Insets top="20.0" />
-                           </VBox.margin>
-                        </Label>
-                        <Label layoutX="56.0" layoutY="252.0" text="End Date">
                            <VBox.margin>
                               <Insets top="20.0" />
                            </VBox.margin>
@@ -88,7 +83,7 @@
                         <Insets />
                      </HBox.margin>
                   </VBox>
-                  <VBox layoutX="10.0" layoutY="10.0" prefHeight="407.0" prefWidth="208.0">
+                  <VBox layoutX="10.0" layoutY="10.0" prefHeight="357.0" prefWidth="208.0">
                      <children>
                         <TextField fx:id="appIdText" disable="true" editable="false">
                            <VBox.margin>
@@ -120,12 +115,12 @@
                               <Insets top="12.0" />
                            </VBox.margin>
                         </ComboBox>
-                        <DatePicker fx:id="startDate" prefWidth="200.0">
+                        <DatePicker fx:id="dateDate" prefWidth="200.0">
                            <VBox.margin>
                               <Insets top="12.0" />
                            </VBox.margin>
                         </DatePicker>
-                        <HBox prefHeight="100.0" prefWidth="200.0">
+                        <HBox prefHeight="45.0" prefWidth="208.0">
                            <children>
                               <ComboBox fx:id="startHourTime" prefWidth="150.0" promptText="Hour">
                                  <HBox.margin>
@@ -142,12 +137,7 @@
                               <Insets top="12.0" />
                            </padding>
                         </HBox>
-                        <DatePicker fx:id="endDate" prefWidth="200.0">
-                           <VBox.margin>
-                              <Insets top="12.0" />
-                           </VBox.margin>
-                        </DatePicker>
-                        <HBox prefHeight="100.0" prefWidth="200.0">
+                        <HBox prefHeight="12.0" prefWidth="208.0">
                            <children>
                               <ComboBox fx:id="endHourTime" prefWidth="150.0" promptText="Hour">
                                  <HBox.margin>
@@ -161,12 +151,12 @@
                               </ComboBox>
                            </children>
                            <VBox.margin>
-                              <Insets top="12.0" />
+                              <Insets top="5.0" />
                            </VBox.margin>
                         </HBox>
                         <ComboBox fx:id="customerBox" prefWidth="200.0" promptText="Please Select One">
                            <VBox.margin>
-                              <Insets top="12.0" />
+                              <Insets top="10.0" />
                            </VBox.margin>
                         </ComboBox>
                      </children>

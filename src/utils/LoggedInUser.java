@@ -17,5 +17,5 @@ public class LoggedInUser {
         return loggedIn.getUsername();
     }
 
-    public static int getUserID(){return loggedIn.getUserID();}
+    public static Integer getUserID(){return loggedIn.getUserID();}
 }

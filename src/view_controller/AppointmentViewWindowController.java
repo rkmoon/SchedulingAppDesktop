@@ -15,6 +15,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Appointment;
+import utils.LoggedInUser;
 
 import java.io.IOException;
 import java.sql.Date;
@@ -77,14 +78,17 @@ public class AppointmentViewWindowController {
     private RadioButton monthRadio;
 
 
+
     public void initialize() throws SQLException {
         populateAppTable();
+        monthRadioClicked();
     }
 
 
     private void populateAppTable() throws SQLException {
 
         FilteredList<Appointment> appointments = new FilteredList<>(AppointmentDAO.getAllAppointments());
+        appointments = new FilteredList<>(getUserAppointments(appointments));
         if(monthRadio.isSelected()){
             appointments = new FilteredList<>(getAllAppointmentsInMonth(appointments));
         }
@@ -96,7 +100,7 @@ public class AppointmentViewWindowController {
         appTitleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
         appDescCol.setCellValueFactory(new PropertyValueFactory<>("description"));
         appLocCol.setCellValueFactory(new PropertyValueFactory<>("location"));
-        appContCol.setCellValueFactory(new PropertyValueFactory<>("contactId"));
+        appContCol.setCellValueFactory(new PropertyValueFactory<>("contactName"));
         appTypeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
         appStartCol.setCellValueFactory(new PropertyValueFactory<>("start"));
         appEndCol.setCellValueFactory(new PropertyValueFactory<>("end"));
@@ -132,11 +136,15 @@ public class AppointmentViewWindowController {
     @FXML
     public void weekRadioClicked() throws SQLException {
         monthRadio.setSelected(false);
+        weekRadio.setDisable(true);
+        monthRadio.setDisable(false);
         populateAppTable();
     }
     @FXML
     public void monthRadioClicked() throws SQLException {
         weekRadio.setSelected(false);
+        monthRadio.setDisable(true);
+        weekRadio.setDisable(false);
         populateAppTable();
     }
 
@@ -166,6 +174,28 @@ public class AppointmentViewWindowController {
         return filteredAppointments;
     }
 
+    @FXML
+    public void updateAppointmentWindow() throws IOException, SQLException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("AppointmentWindow.fxml"));
+        Parent root = loader.load();
+        AppointmentWindowController appointmentWindowController = loader.getController();
+        appointmentWindowController.getAppointmentMainWindowInstance(this);
+        if(appTable.getSelectionModel().getSelectedItem() != null) {
+            appointmentWindowController.setAppointmentToUpdate(appTable.getSelectionModel().getSelectedItem());
+            appointmentWindowController.setFields();
+
+            Stage stage = new Stage();
+            Scene scene = new Scene(root);
+            stage.setTitle("Appointment Window");
+            stage.setScene(scene);
+            stage.show();
+        }
+        else{
+            System.out.println("No Appointment Selected");
+            //ADD ERROR BOX HERE
+        }
+    }
+
     private ObservableList<Appointment> getAllAppointmentsInWeek(FilteredList<Appointment> appointments) {
         ObservableList<Appointment> filteredAppointments = FXCollections.observableArrayList();
         TemporalField weekOfYear = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear();
@@ -183,11 +213,6 @@ public class AppointmentViewWindowController {
     }
 
 
-//        LocalDate date = LocalDate.now();
-//        TemporalField woy = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear();
-//        int weekNumber = date.get(woy);
-
-
     public void updateTable() throws SQLException {
         populateAppTable();
     }
@@ -195,5 +220,16 @@ public class AppointmentViewWindowController {
     private void closeWindow(){
         Stage stage = (Stage) custButton.getScene().getWindow();
         stage.close();
+    }
+
+    private ObservableList<Appointment> getUserAppointments(ObservableList<Appointment> appointments){
+        int userID = LoggedInUser.getUserID();
+        ObservableList<Appointment> filteredAppointments = FXCollections.observableArrayList();
+        appointments.forEach(appointment -> {
+            if (userID == appointment.getUserId()) {
+                filteredAppointments.add(appointment);
+            }
+        });
+        return filteredAppointments;
     }
 }
