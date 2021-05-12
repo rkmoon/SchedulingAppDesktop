@@ -17,7 +17,7 @@
          <children>
             <HBox prefHeight="25.0" prefWidth="892.0">
                <children>
-                  <Button fx:id="appointmentButton" mnemonicParsing="false" onAction="#goToAppointments" text="Appointments" />
+                  <Button fx:id="appointmentButton" mnemonicParsing="false" onAction="#goToAppointments" text="View Appointments" />
                </children>
             </HBox>
             <Label alignment="CENTER" text="Customers">

@@ -14,6 +14,7 @@ import model.Appointment;
 import model.Contact;
 import model.Customer;
 import utils.LoggedInUser;
+import utils.TimeUtilities;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -80,7 +81,7 @@ public class AppointmentWindowController {
 
     @FXML
     void onConfirmButton() throws SQLException {
-        if(checkFields()) {
+        if(checkFields() && checkBusinessHours()) {
             AppointmentDAO.insertAppointment(createAppointment());
         }
         else{
@@ -157,6 +158,8 @@ public class AppointmentWindowController {
         int hour = Integer.parseInt(hourBox.getValue());
         int minute = Integer.parseInt(minuteBox.getValue());
         LocalDateTime startTime = LocalDateTime.of(year, month, day, hour, minute);
+
+        startTime = TimeUtilities.localToUTC(startTime);
         timestamp = Timestamp.valueOf(startTime);
         return timestamp;
     }
@@ -174,6 +177,32 @@ public class AppointmentWindowController {
         fillCustomerBox();
         customerBox.setValue(customer);
         customerBox.setDisable(true);
+    }
+
+    private boolean checkBusinessHours(){
+        boolean isValid;
+        LocalDateTime startTime = dateAndTimeToTimestamp(startDate, startHourTime, startMinuteTime).toLocalDateTime();
+        LocalDateTime endTime = dateAndTimeToTimestamp(endDate, endHourTime, endMinuteTime).toLocalDateTime();
+
+        if(endTime.isBefore(startTime)){
+            isValid = false;
+            System.out.println("end time before start time");
+        }
+        else if(TimeUtilities.checkBeforeOpenHours(startTime))
+        {
+            isValid = false;
+            System.out.println("before open");
+        }
+        else if(TimeUtilities.checkAfterCloseHours(endTime))
+        {
+            isValid = false;
+            System.out.println("after close");
+        }
+        else {
+            isValid = true;
+        }
+
+        return isValid;
     }
 
 }
