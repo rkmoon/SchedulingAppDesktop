@@ -170,4 +170,10 @@ public class AppointmentWindowController {
         appIdText.setText(String.valueOf(newAppointmentID));
     }
 
+    public void importCustomer(Customer customer) throws SQLException {
+        fillCustomerBox();
+        customerBox.setValue(customer);
+        customerBox.setDisable(true);
+    }
+
 }

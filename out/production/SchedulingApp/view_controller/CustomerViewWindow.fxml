@@ -41,7 +41,8 @@
             </TableView>
             <ButtonBar prefHeight="40.0" prefWidth="831.0">
               <buttons>
-                  <Button fx:id="addCustomerButton" alignment="CENTER" mnemonicParsing="false" onAction="#openAddCustomerWindow" text="Add" />
+                  <Button fx:id="addCustomerButton" alignment="CENTER" mnemonicParsing="false" onAction="#openAddCustomerWindow" text="Add Customer" />
+                  <Button fx:id="addAppointmentButton" mnemonicParsing="false" onAction="#openAppointmentWindow" text="Add Appointment" />
                 <Button fx:id="updateCustomerButton" mnemonicParsing="false" onAction="#openUpdateCustomerWindow" text="Update" />
                   <Button fx:id="deleteCustomerButton" mnemonicParsing="false" onAction="#deleteCustomer" text="Delete" />
               </buttons>

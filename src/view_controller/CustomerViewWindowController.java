@@ -48,6 +48,9 @@ public class CustomerViewWindowController {
     private Button addCustomerButton;
 
     @FXML
+    private Button addAppointmentButton;
+
+    @FXML
     private Button updateCustomerButton;
 
     @FXML
@@ -109,6 +112,20 @@ public class CustomerViewWindowController {
         }
 
         customerWindowController.setAddOrUpdate();
+
+        Stage stage = new Stage();
+        Scene scene = new Scene(root);
+        stage.setTitle("Customer Window");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    @FXML
+    public void openAppointmentWindow() throws IOException, SQLException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("AppointmentWindow.fxml"));
+        Parent root = loader.load();
+        AppointmentWindowController appointmentWindowController = loader.getController();
+        appointmentWindowController.importCustomer(custTable.getSelectionModel().getSelectedItem());
 
         Stage stage = new Stage();
         Scene scene = new Scene(root);
