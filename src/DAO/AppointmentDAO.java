@@ -64,4 +64,32 @@ public class AppointmentDAO {
 
         ps.execute();
     }
+
+    public static void updateAppointment(Appointment appointment) throws SQLException{
+        String updateString = "UPDATE customers set Title = ?, Description = ?, Location = ?, Type = ?, " +
+                "Start = ?, End = ?, Last_Update = now(), Last_Updated_By = ?" +
+                "Customer_ID = ?, User_ID = ?, Contact_ID = ? where (Appointment_ID = ?)";
+        DBQuery.setPrepareStatement(DBConnection.getConnection(),updateString);
+        PreparedStatement ps = DBQuery.getPrepareStatement();
+
+        ps.setString(1, appointment.getTitle());
+        ps.setString(2, appointment.getDescription());
+        ps.setString(3, appointment.getLocation());
+        ps.setString(4, appointment.getType());
+        ps.setTimestamp(5, appointment.getStart());
+        ps.setTimestamp(6,appointment.getEnd());
+        ps.setString(7, LoggedInUser.getUserName());
+        ps.setInt(8, appointment.getCustId());
+        ps.setInt(9, appointment.getUserId());
+        ps.setInt(10, appointment.getContactId());
+
+        ps.execute();
+    }
+
+    public static void deleteAppointment(Appointment appointment) throws SQLException{
+        String deleteString = "DELETE FROM appointments WHERE (Appointment_ID = " + appointment.getId() + ")";
+        DBQuery.setPrepareStatement(DBConnection.getConnection(), deleteString);
+        PreparedStatement ps = DBQuery.getPrepareStatement();
+        ps.execute();
+    }
 }

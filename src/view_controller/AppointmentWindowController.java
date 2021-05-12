@@ -80,7 +80,13 @@ public class AppointmentWindowController {
 
     @FXML
     void onConfirmButton() throws SQLException {
-        AppointmentDAO.insertAppointment(createAppointment());
+        if(checkFields()) {
+            AppointmentDAO.insertAppointment(createAppointment());
+        }
+        else{
+            System.out.println("Not all fields filled");
+            //ADD POPUP WINDOW HERE
+        }
     }
 
     private void closeWindow(){
@@ -131,6 +137,16 @@ public class AppointmentWindowController {
         for (int i = 0; i < 60; i += 15){
             comboBox.getItems().add(String.valueOf(i));
         }
+    }
+
+    private boolean checkFields(){
+        boolean fieldsFilled = !appIdText.getText().isEmpty() && !titleText.getText().isEmpty() && !descriptionText.getText().isEmpty() &&
+                !locationText.getText().isEmpty() && !typeText.getText().isEmpty() && contactBox.getValue() != null &&
+                startDate.getValue() != null && !startHourTime.getValue().isEmpty() &&
+                !startMinuteTime.getValue().isEmpty() && endDate.getValue() != null &&
+                !endHourTime.getValue().isEmpty() && !endMinuteTime.getValue().isEmpty() && customerBox.getValue() != null;
+
+        return fieldsFilled;
     }
 
     private Timestamp dateAndTimeToTimestamp(DatePicker date, ComboBox<String> hourBox, ComboBox<String> minuteBox){

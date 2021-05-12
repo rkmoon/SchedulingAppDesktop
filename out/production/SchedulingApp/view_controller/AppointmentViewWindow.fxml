@@ -48,7 +48,7 @@
                <buttons>
                   <Button fx:id="addAppButton" mnemonicParsing="false" onAction="#addAppointment" text="Add" />
                   <Button fx:id="updateAppButton" mnemonicParsing="false" text="Update" />
-                  <Button fx:id="deleteAppButton" mnemonicParsing="false" text="Delete" />
+                  <Button fx:id="deleteAppButton" mnemonicParsing="false" onAction="#deleteAppointment" text="Delete" />
                </buttons>
             </ButtonBar>
          </children>

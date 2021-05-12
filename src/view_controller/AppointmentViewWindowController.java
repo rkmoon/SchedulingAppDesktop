@@ -106,6 +106,24 @@ public class AppointmentViewWindowController {
         stage.show();
     }
 
+    @FXML
+    public void deleteAppointment() throws SQLException {
+        Appointment appointmentToDelete = appTable.getSelectionModel().getSelectedItem();
+        if(appointmentToDelete == null){
+            System.out.println("No Appointment Selected");
+            //ADD POPUP WINDOW HERE
+        }
+        else {
+            AppointmentDAO.deleteAppointment(appointmentToDelete);
+            updateTable();
+        }
+
+    }
+
+    private void updateTable() throws SQLException {
+        populateAppTable();
+    }
+
     private void closeWindow(){
         Stage stage = (Stage) custButton.getScene().getWindow();
         stage.close();
