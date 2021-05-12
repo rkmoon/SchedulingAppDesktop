@@ -1,12 +1,15 @@
 package view_controller;
 
 import DAO.AppointmentDAO;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -16,6 +19,10 @@ import model.Appointment;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.temporal.TemporalField;
+import java.time.temporal.WeekFields;
+import java.util.Locale;
 import java.util.Objects;
 
 
@@ -63,6 +70,12 @@ public class AppointmentViewWindowController {
     @FXML
     private Button custButton;
 
+    @FXML
+    private RadioButton weekRadio;
+
+    @FXML
+    private RadioButton monthRadio;
+
 
     public void initialize() throws SQLException {
         populateAppTable();
@@ -70,7 +83,15 @@ public class AppointmentViewWindowController {
 
 
     private void populateAppTable() throws SQLException {
+
         FilteredList<Appointment> appointments = new FilteredList<>(AppointmentDAO.getAllAppointments());
+        if(monthRadio.isSelected()){
+            appointments = new FilteredList<>(getAllAppointmentsInMonth(appointments));
+        }
+        else{
+            appointments = new FilteredList<>(getAllAppointmentsInWeek(appointments));
+        }
+
         appIDCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         appTitleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
         appDescCol.setCellValueFactory(new PropertyValueFactory<>("description"));
@@ -97,13 +118,26 @@ public class AppointmentViewWindowController {
 
     @FXML
     public void addAppointment() throws IOException {
-        Stage stage = new Stage();
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("AppointmentWindow.fxml")));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("AppointmentWindow.fxml"));
+        Parent root = loader.load();
+        AppointmentWindowController appointmentWindowController = loader.getController();
+        appointmentWindowController.getAppointmentMainWindowInstance(this);
 
+        Stage stage = new Stage();
         Scene scene = new Scene(root);
         stage.setTitle("Appointments");
         stage.setScene(scene);
         stage.show();
+    }
+    @FXML
+    public void weekRadioClicked() throws SQLException {
+        monthRadio.setSelected(false);
+        populateAppTable();
+    }
+    @FXML
+    public void monthRadioClicked() throws SQLException {
+        weekRadio.setSelected(false);
+        populateAppTable();
     }
 
     @FXML
@@ -120,7 +154,41 @@ public class AppointmentViewWindowController {
 
     }
 
-    private void updateTable() throws SQLException {
+    private ObservableList<Appointment> getAllAppointmentsInMonth(FilteredList<Appointment> appointments){
+        ObservableList<Appointment> filteredAppointments = FXCollections.observableArrayList();
+        appointments.forEach(appointment -> {
+            LocalDateTime appointmentTime = appointment.getStart().toLocalDateTime();
+            LocalDateTime nowTime = LocalDateTime.now();
+            if(nowTime.getMonth() == appointmentTime.getMonth() && nowTime.getYear() == appointmentTime.getYear()){
+                filteredAppointments.add(appointment);
+            }
+        });
+        return filteredAppointments;
+    }
+
+    private ObservableList<Appointment> getAllAppointmentsInWeek(FilteredList<Appointment> appointments) {
+        ObservableList<Appointment> filteredAppointments = FXCollections.observableArrayList();
+        TemporalField weekOfYear = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear();
+        appointments.forEach(appointment -> {
+            LocalDateTime appointmentTime = appointment.getStart().toLocalDateTime();
+            LocalDateTime nowTime = LocalDateTime.now();
+                    if (nowTime.get(weekOfYear) == appointmentTime.get(weekOfYear) &&
+                            nowTime.getYear() == appointmentTime.getYear()) {
+                        filteredAppointments.add(appointment);
+                    }
+                }
+
+        );
+        return filteredAppointments;
+    }
+
+
+//        LocalDate date = LocalDate.now();
+//        TemporalField woy = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear();
+//        int weekNumber = date.get(woy);
+
+
+    public void updateTable() throws SQLException {
         populateAppTable();
     }
 

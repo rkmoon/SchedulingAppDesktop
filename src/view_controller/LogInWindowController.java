@@ -73,10 +73,10 @@ public class LogInWindowController {
 
     private void logInSuccessful() throws IOException {
         Stage stage = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("MainWindow.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("CustomerViewWindow.fxml"));
 
         Scene scene = new Scene(root);
-        stage.setTitle("Choose an Option");
+        stage.setTitle("Scheduling Application");
         stage.setScene(scene);
         stage.show();
     }

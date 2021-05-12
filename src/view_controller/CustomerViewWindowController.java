@@ -126,6 +126,7 @@ public class CustomerViewWindowController {
         Parent root = loader.load();
         AppointmentWindowController appointmentWindowController = loader.getController();
         appointmentWindowController.importCustomer(custTable.getSelectionModel().getSelectedItem());
+        appointmentWindowController.getCustomerMainWindowInstance(this);
 
         Stage stage = new Stage();
         Scene scene = new Scene(root);
@@ -143,7 +144,6 @@ public class CustomerViewWindowController {
         stage.setTitle("Appointments");
         stage.setScene(scene);
         stage.show();
-        closeWindow();
     }
 
     @FXML void deleteCustomer() throws SQLException {

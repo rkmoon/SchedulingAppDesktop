@@ -68,6 +68,10 @@ public class AppointmentWindowController {
     @FXML
     private Button cancelButton;
 
+    private boolean isOpenedFromCustomer;
+    private CustomerViewWindowController customerViewWindowController;
+    private AppointmentViewWindowController appointmentViewWindowController;
+
 
     @FXML
     public void initialize() throws SQLException {
@@ -83,11 +87,18 @@ public class AppointmentWindowController {
     void onConfirmButton() throws SQLException {
         if(checkFields() && checkBusinessHours()) {
             AppointmentDAO.insertAppointment(createAppointment());
+            if(isOpenedFromCustomer){
+                customerViewWindowController.updateTable();
+            }
+            else {
+                appointmentViewWindowController.updateTable();
+            }
         }
         else{
             System.out.println("Not all fields filled");
             //ADD POPUP WINDOW HERE
         }
+        closeWindow();
     }
 
     private void closeWindow(){
@@ -198,11 +209,26 @@ public class AppointmentWindowController {
             isValid = false;
             System.out.println("after close");
         }
+        else if(startTime.getDayOfYear()!= endTime.getDayOfYear() && startTime.getYear() != endTime.getYear()){
+            isValid = false;
+            System.out.println("spans multiple days");
+        }
         else {
             isValid = true;
         }
 
         return isValid;
+    }
+
+
+    public void getCustomerMainWindowInstance(CustomerViewWindowController controller) {
+        this.customerViewWindowController = controller;
+        isOpenedFromCustomer = true;
+    }
+
+    public void getAppointmentMainWindowInstance(AppointmentViewWindowController controller){
+        this.appointmentViewWindowController = controller;
+        isOpenedFromCustomer = false;
     }
 
 }
