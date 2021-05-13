@@ -1,5 +1,7 @@
 package view_controller;
 
+import DAO.DBConnection;
+import DAO.DBQuery;
 import DAO.UserDAO;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,10 +11,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import DAO.DBConnection;
-import DAO.DBQuery;
 import model.User;
 import utils.LoggedInUser;
+import utils.RecordLogInAttempts;
 
 import java.io.IOException;
 import java.sql.PreparedStatement;
@@ -81,7 +82,7 @@ public class LogInWindowController {
         stage.show();
     }
 
-    private boolean checkLogIn(){
+    private boolean checkLogIn() throws IOException {
         //return DBQuery.CheckLogIn(usernameText.getText(), passwordText.getText());
         boolean isCorrect = false;
         String checkCredentials = "SELECT User_Name, Password FROM users WHERE User_Name= ? AND Password= ?";
@@ -102,6 +103,7 @@ public class LogInWindowController {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        RecordLogInAttempts.recordAttempt(usernameText.getText(), isCorrect);
         return isCorrect;
     }
 

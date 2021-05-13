@@ -298,15 +298,15 @@ public class AppointmentWindowController {
                 customerAppointments.add(appointment);
             }
         });
-
-        System.out.println(customerAppointments);
         customerAppointments.forEach(appointment -> {
             LocalDateTime appointmentToCheckStartTime = appointment.getStart().toLocalDateTime();
             LocalDateTime appointmentToCheckEndTime = appointment.getEnd().toLocalDateTime();
-            if (TimeUtilities.isOverlapping(appointmentToAddTimeStart, appointmentToCheckStartTime,
-                    appointmentToAddTimeEnd, appointmentToCheckEndTime)) {
-                isOverlap.set(true);
-                System.out.println("found overlap");
+            if(!(appointment.getId() == appointmentToAdd.getId())) {
+                if (TimeUtilities.isOverlapping(appointmentToAddTimeStart, appointmentToCheckStartTime,
+                        appointmentToAddTimeEnd, appointmentToCheckEndTime)) {
+                    isOverlap.set(true);
+                    System.out.println("found overlap");
+                }
             }
         });
         return isOverlap.get();

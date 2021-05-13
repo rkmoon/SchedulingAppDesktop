@@ -9,6 +9,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import model.Appointment;
 import model.Contact;
 
@@ -64,6 +65,12 @@ public class ContactScheduleWindowController {
             contactSelected = contactBox.getValue();
             fillTable();
         }
+    }
+
+    @FXML
+    public void closeWindow(){
+        Stage stage = (Stage) contactBox.getScene().getWindow();
+        stage.close();
     }
 
     private void fillTable() throws SQLException {
