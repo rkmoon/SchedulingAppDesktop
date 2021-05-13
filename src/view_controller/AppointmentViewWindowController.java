@@ -18,7 +18,6 @@ import model.Appointment;
 import utils.LoggedInUser;
 
 import java.io.IOException;
-import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalField;
@@ -51,10 +50,10 @@ public class AppointmentViewWindowController {
     private TableColumn<Appointment, String> appTypeCol;
 
     @FXML
-    private TableColumn<Appointment, Date> appStartCol;
+    private TableColumn<Appointment, String> appStartCol;
 
     @FXML
-    private TableColumn<Appointment, Date> appEndCol;
+    private TableColumn<Appointment, String> appEndCol;
 
     @FXML
     private TableColumn<Appointment, Integer> appCustIdCol;
@@ -102,8 +101,8 @@ public class AppointmentViewWindowController {
         appLocCol.setCellValueFactory(new PropertyValueFactory<>("location"));
         appContCol.setCellValueFactory(new PropertyValueFactory<>("contactName"));
         appTypeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
-        appStartCol.setCellValueFactory(new PropertyValueFactory<>("start"));
-        appEndCol.setCellValueFactory(new PropertyValueFactory<>("end"));
+        appStartCol.setCellValueFactory(new PropertyValueFactory<>("formattedLocalStartTime"));
+        appEndCol.setCellValueFactory(new PropertyValueFactory<>("formattedLocalEndTime"));
         appCustIdCol.setCellValueFactory(new PropertyValueFactory<>("custId"));
 
         appTable.setItems(appointments);

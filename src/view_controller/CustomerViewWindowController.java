@@ -143,17 +143,24 @@ public class CustomerViewWindowController {
 
     @FXML
     public void openAppointmentWindow() throws IOException, SQLException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("AppointmentWindow.fxml"));
-        Parent root = loader.load();
-        AppointmentWindowController appointmentWindowController = loader.getController();
-        appointmentWindowController.importCustomer(custTable.getSelectionModel().getSelectedItem());
-        appointmentWindowController.getCustomerMainWindowInstance(this);
+        Customer customerSelected = custTable.getSelectionModel().getSelectedItem();
+        if(customerSelected != null) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("AppointmentWindow.fxml"));
+            Parent root = loader.load();
+            AppointmentWindowController appointmentWindowController = loader.getController();
+            appointmentWindowController.importCustomer(customerSelected);
+            appointmentWindowController.getCustomerMainWindowInstance(this);
 
-        Stage stage = new Stage();
-        Scene scene = new Scene(root);
-        stage.setTitle("Customer Window");
-        stage.setScene(scene);
-        stage.show();
+            Stage stage = new Stage();
+            Scene scene = new Scene(root);
+            stage.setTitle("Customer Window");
+            stage.setScene(scene);
+            stage.show();
+        }
+        else{
+            System.out.println("No customer Selected");
+            //ADD ERROR HERE
+        }
     }
 
     @FXML
@@ -232,6 +239,17 @@ public class CustomerViewWindowController {
             }
         });
         return hasAppointments.get();
+    }
+
+    @FXML
+    public void openReports() throws IOException {
+        Stage stage = new Stage();
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("ReportsWindow.fxml")));
+
+        Scene scene = new Scene(root);
+        stage.setTitle("Reports");
+        stage.setScene(scene);
+        stage.show();
     }
 
 

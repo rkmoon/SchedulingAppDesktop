@@ -15,9 +15,19 @@
    <children>
       <VBox alignment="CENTER" prefHeight="516.0" prefWidth="992.0" spacing="20.0">
          <children>
-            <HBox alignment="CENTER_LEFT" prefHeight="25.0" prefWidth="892.0">
+            <HBox alignment="TOP_CENTER" prefHeight="25.0" prefWidth="892.0">
                <children>
-                  <Button fx:id="appointmentButton" mnemonicParsing="false" onAction="#goToAppointments" text="Appointments" />
+                  <ButtonBar prefHeight="25.0" prefWidth="112.0">
+                    <buttons>
+                        <Button fx:id="appointmentButton" mnemonicParsing="false" onAction="#goToAppointments" prefHeight="25.0" prefWidth="103.0" text="Appointments" />
+                    </buttons>
+                  </ButtonBar>
+                  <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                  <ButtonBar prefHeight="25.0" prefWidth="125.0">
+                     <buttons>
+                      <Button mnemonicParsing="false" onAction="#openReports" text="Reports" />
+                     </buttons>
+                  </ButtonBar>
                </children>
                <VBox.margin>
                   <Insets top="20.0" />

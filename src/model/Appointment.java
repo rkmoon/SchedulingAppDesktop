@@ -1,6 +1,11 @@
 package model;
 
+import utils.TimeUtilities;
+
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 
 public class Appointment {
 
@@ -19,8 +24,13 @@ public class Appointment {
     private int userId;
     private int contactId;
     private String contactName;
+    private LocalDateTime localStartTime;
+    private LocalDateTime localEndTime;
+    private String formattedLocalStartTime;
+    private String formattedLocalEndTime;
 
-    public Appointment(){}
+    public Appointment(){
+    }
     public Appointment(int id, String title, String description, String location, String type, Timestamp start,
                        Timestamp end, Timestamp createDate, String createdBy, Timestamp lastUpdate,
                        String lastUpdateBy, int custId, int userId, int contactId) {
@@ -86,6 +96,9 @@ public class Appointment {
 
     public void setStart(Timestamp start) {
         this.start = start;
+        this.localStartTime = TimeUtilities.utcToLocal(start.toLocalDateTime());
+        DateTimeFormatter format = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
+        this.formattedLocalStartTime = localStartTime.format(format);
     }
 
     public Timestamp getEnd() {
@@ -94,6 +107,9 @@ public class Appointment {
 
     public void setEnd(Timestamp end) {
         this.end = end;
+        this.localEndTime = TimeUtilities.utcToLocal(end.toLocalDateTime());
+        DateTimeFormatter format = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
+        this.formattedLocalEndTime = localEndTime.format(format);
     }
 
     public Timestamp getCreateDate() {
@@ -159,4 +175,19 @@ public class Appointment {
         this.contactName = contactName;
     }
 
+    public LocalDateTime getLocalStartTime() {
+        return localStartTime;
+    }
+
+    public LocalDateTime getLocalEndTime() {
+        return localEndTime;
+    }
+
+    public String getFormattedLocalStartTime() {
+        return formattedLocalStartTime;
+    }
+
+    public String getFormattedLocalEndTime() {
+        return formattedLocalEndTime;
+    }
 }

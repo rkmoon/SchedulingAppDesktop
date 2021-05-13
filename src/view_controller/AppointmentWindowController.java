@@ -106,6 +106,7 @@ public class AppointmentWindowController {
                 } else {
                     appointmentViewWindowController.updateTable();
                 }
+                closeWindow();
             }
             else{
                 System.out.println("Schedule Overlap");
@@ -116,7 +117,6 @@ public class AppointmentWindowController {
             System.out.println("Not all fields filled");
             //ADD POPUP WINDOW HERE
         }
-        closeWindow();
     }
 
     private void closeWindow() {
@@ -303,7 +303,6 @@ public class AppointmentWindowController {
         customerAppointments.forEach(appointment -> {
             LocalDateTime appointmentToCheckStartTime = appointment.getStart().toLocalDateTime();
             LocalDateTime appointmentToCheckEndTime = appointment.getEnd().toLocalDateTime();
-            //System.out.println("Start 1: " + appointmentToAddTimeStart + " Start 2" + );
             if (TimeUtilities.isOverlapping(appointmentToAddTimeStart, appointmentToCheckStartTime,
                     appointmentToAddTimeEnd, appointmentToCheckEndTime)) {
                 isOverlap.set(true);
