@@ -15,6 +15,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Appointment;
+import utils.Errors;
 import utils.LoggedInUser;
 
 import java.io.IOException;
@@ -148,11 +149,10 @@ public class AppointmentViewWindowController {
     }
 
     @FXML
-    public void deleteAppointment() throws SQLException {
+    public void deleteAppointment() throws SQLException, IOException {
         Appointment appointmentToDelete = appTable.getSelectionModel().getSelectedItem();
         if(appointmentToDelete == null){
-            System.out.println("No Appointment Selected");
-            //ADD POPUP WINDOW HERE
+            Errors.openErrorMenu(Errors.getNoSelection());
         }
         else {
             AppointmentDAO.deleteAppointment(appointmentToDelete);
@@ -190,8 +190,7 @@ public class AppointmentViewWindowController {
             stage.show();
         }
         else{
-            System.out.println("No Appointment Selected");
-            //ADD ERROR BOX HERE
+            Errors.openErrorMenu(Errors.getNoSelection());
         }
     }
 

@@ -12,7 +12,9 @@ import javafx.stage.Stage;
 import model.Country;
 import model.Customer;
 import model.FLDivision;
+import utils.Errors;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -77,7 +79,7 @@ public class CustomerWindowController {
     }
 
     @FXML
-    public void onConfirmButton() throws SQLException {
+    public void onConfirmButton() throws SQLException, IOException {
         if (checkFields()) {
             Customer customer = createCustomer();
             if(isUpdateCustomer)
@@ -92,8 +94,7 @@ public class CustomerWindowController {
 
             closeWindow();
         } else {
-            // Add error message
-            System.out.println("Form not complete");
+            Errors.openErrorMenu(Errors.getNoSelection());
         }
     }
 

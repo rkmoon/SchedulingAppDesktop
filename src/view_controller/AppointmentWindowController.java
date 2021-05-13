@@ -14,9 +14,11 @@ import javafx.stage.Stage;
 import model.Appointment;
 import model.Contact;
 import model.Customer;
+import utils.Errors;
 import utils.LoggedInUser;
 import utils.TimeUtilities;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -91,7 +93,7 @@ public class AppointmentWindowController {
     }
 
     @FXML
-    void onConfirmButton() throws SQLException {
+    void onConfirmButton() throws SQLException, IOException {
         if (checkFields() && checkBusinessHours()) {
             Appointment appointmentToAdd = createAppointment();
             if (!checkAppointmentOverlap(appointmentToAdd)) {
@@ -109,13 +111,11 @@ public class AppointmentWindowController {
                 closeWindow();
             }
             else{
-                System.out.println("Schedule Overlap");
-                //ADD ERROR BOX HERE
+                Errors.openErrorMenu(Errors.getOverlap());
             }
         }
         else {
-            System.out.println("Not all fields filled");
-            //ADD POPUP WINDOW HERE
+            Errors.openErrorMenu(Errors.getFieldsIncomplete());
         }
     }
 
@@ -208,23 +208,23 @@ public class AppointmentWindowController {
         customerBox.setDisable(true);
     }
 
-    private boolean checkBusinessHours() {
+    private boolean checkBusinessHours() throws IOException {
         boolean isValid;
         LocalDateTime startTime = dateAndTimeToTimestamp(dateDate, startHourTime, startMinuteTime).toLocalDateTime();
         LocalDateTime endTime = dateAndTimeToTimestamp(dateDate, endHourTime, endMinuteTime).toLocalDateTime();
 
         if (endTime.isBefore(startTime)) {
             isValid = false;
-            System.out.println("end time before start time");
+            Errors.openErrorMenu(Errors.getEndBeforeStart());
         } else if (TimeUtilities.checkBeforeOpenHours(startTime)) {
             isValid = false;
-            System.out.println("before open");
+            Errors.openErrorMenu(Errors.getBusinessHours());
         } else if (TimeUtilities.checkAfterCloseHours(endTime)) {
             isValid = false;
-            System.out.println("after close");
+            Errors.openErrorMenu(Errors.getBusinessHours());
         } else if (startTime.getDayOfYear() != endTime.getDayOfYear() && startTime.getYear() != endTime.getYear()) {
             isValid = false;
-            System.out.println("spans multiple days");
+            Errors.openErrorMenu(Errors.getMultipleDays());
         } else {
             isValid = true;
         }
@@ -305,7 +305,11 @@ public class AppointmentWindowController {
                 if (TimeUtilities.isOverlapping(appointmentToAddTimeStart, appointmentToCheckStartTime,
                         appointmentToAddTimeEnd, appointmentToCheckEndTime)) {
                     isOverlap.set(true);
-                    System.out.println("found overlap");
+                    try {
+                        Errors.openErrorMenu(Errors.getOverlap());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });

@@ -63,7 +63,6 @@ public class LogInWindowController {
     @FXML
     public void logInClicked(javafx.event.ActionEvent actionEvent) throws IOException {
         if(checkLogIn()){
-            System.out.println("Correct Log In");
             logInSuccessful();
             closeWindow();
         }
@@ -98,7 +97,6 @@ public class LogInWindowController {
                 User loggedIn;
                 loggedIn = UserDAO.getUser(usernameText.getText());
                 LoggedInUser.setLoggedIn(loggedIn);
-                System.out.println(loggedIn.getUsername());
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());

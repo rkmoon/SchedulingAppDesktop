@@ -18,6 +18,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Appointment;
 import model.Customer;
+import utils.Errors;
 import utils.LoggedInUser;
 import utils.TimeUtilities;
 
@@ -121,8 +122,7 @@ public class CustomerViewWindowController {
         if(updatingCustomer){
             Customer custToUpdate = custTable.getSelectionModel().getSelectedItem();
             if (custToUpdate == null){
-                System.out.println("No customer selected");
-                // ADD POPUP WINDOW HERE
+                Errors.openErrorMenu(Errors.getNoSelection());
                 return;
             }
             customerWindowController.setUpdateCustomer(true);
@@ -158,8 +158,7 @@ public class CustomerViewWindowController {
             stage.show();
         }
         else{
-            System.out.println("No customer Selected");
-            //ADD ERROR HERE
+            Errors.openErrorMenu(Errors.getNoSelection());
         }
     }
 
@@ -174,15 +173,13 @@ public class CustomerViewWindowController {
         stage.show();
     }
 
-    @FXML void deleteCustomer() throws SQLException {
+    @FXML void deleteCustomer() throws SQLException, IOException {
         Customer custToDelete = custTable.getSelectionModel().getSelectedItem();
         if(custToDelete == null){
-            System.out.println("No Customer Selected");
-            //ADD ERROR BOX
+            Errors.openErrorMenu(Errors.getNoSelection());
         }
         else if(checkForAppointments(custToDelete)){
-            System.out.println("Customer has appointments");
-            //ADD ERROR BOX
+            Errors.openErrorMenu(Errors.getCustomerHasAppointments());
         }
         else {
             //ADD CONFIRMATION BOX
