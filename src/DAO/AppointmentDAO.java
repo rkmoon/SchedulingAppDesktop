@@ -66,10 +66,6 @@ public class AppointmentDAO {
         ps.execute();
     }
 
-    public static void updateAppointment() throws SQLException {
-        updateAppointment();
-    }
-
     public static void updateAppointment(Appointment appointment) throws SQLException{
         String updateString = "UPDATE appointments set Title = ?, Description = ?, Location = ?, Type = ?, " +
                 "Start = ?, End = ?, Last_Update = now(), Last_Updated_By = ?," +

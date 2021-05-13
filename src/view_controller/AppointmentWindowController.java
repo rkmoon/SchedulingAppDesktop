@@ -96,7 +96,7 @@ public class AppointmentWindowController {
             Appointment appointmentToAdd = createAppointment();
             if (!checkAppointmentOverlap(appointmentToAdd)) {
                 if (isUpdate) {
-                    AppointmentDAO.updateAppointment();
+                    AppointmentDAO.updateAppointment(appointmentToAdd);
                 } else {
                     AppointmentDAO.insertAppointment(appointmentToAdd);
 

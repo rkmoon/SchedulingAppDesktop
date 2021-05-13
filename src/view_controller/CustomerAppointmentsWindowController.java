@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import model.Appointment;
 import model.MonthAppointment;
 import model.TypeAppointment;
@@ -48,6 +49,12 @@ public class CustomerAppointmentsWindowController {
         typeTable.setItems(typeAppointments);
         monthTable.setItems(monthAppointments);
 
+    }
+
+    @FXML
+    public void closeWindow(){
+        Stage stage = (Stage) typeTable.getScene().getWindow();
+        stage.close();
     }
 
     private ObservableList<TypeAppointment> getNumberofEachType() throws SQLException {
