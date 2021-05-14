@@ -1,5 +1,9 @@
 package model;
 
+/**
+ * Class used to create the report for appointments in a month. It includes a counter for each retrieved from the
+ * database.
+ */
 public class MonthAppointment {
     private String month;
     private Integer number;

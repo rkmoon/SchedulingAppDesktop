@@ -2,6 +2,9 @@ package model;
 
 import java.sql.Timestamp;
 
+/**
+ * Class for containing the Country object retrieved from the database
+ */
 public class Country {
     private int countryID;
     private String country;

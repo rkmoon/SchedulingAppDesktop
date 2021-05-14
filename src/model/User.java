@@ -2,6 +2,9 @@ package model;
 
 import java.sql.Timestamp;
 
+/**
+ * Class to contain the user object retrieved from the database
+ */
 public class User {
 
     private int userID;
@@ -14,15 +17,7 @@ public class User {
 
 
     public User(){}
-    public User(int userID, String username, String password, Timestamp createDate, String createdBy, Timestamp lastUpdate, String lastUpdatedBy) {
-        this.userID = userID;
-        this.username = username;
-        this.password = password;
-        this.createDate = createDate;
-        this.createdBy = createdBy;
-        this.lastUpdate = lastUpdate;
-        this.lastUpdatedBy = lastUpdatedBy;
-    }
+
 
     public int getUserID() {
         return userID;

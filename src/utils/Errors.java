@@ -8,7 +8,11 @@ import view_controller.ErrorWindowController;
 
 import java.io.IOException;
 
-
+/**
+ * This class contains all the error messages and opens the error window. Instead of writing an error message for each
+ * time an error occurs, more general error messages are contained here and called by other classes to generate the error
+ * message.
+ */
 public class Errors {
     private static final String noSelection = "Nothing Selected";
     private static final String overlap = "Appointment Overlaps with Another";
@@ -18,6 +22,11 @@ public class Errors {
     private static final String fieldsIncomplete = "All Fields Must be Filled";
     private static final String customerHasAppointments = "All Customer Appointments Must be Deleted Before Customer can be Deleted";
 
+    /**
+     * opens the error menu and sends the error message to be displayed
+     * @param error error message to be displayed
+     * @throws IOException error opening the window
+     */
     public static void openErrorMenu(String error) throws IOException {
 
         FXMLLoader loader = new FXMLLoader(Errors.class.getResource("../view_controller/ErrorWindow.fxml"));

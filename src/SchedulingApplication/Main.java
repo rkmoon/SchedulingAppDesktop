@@ -7,6 +7,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ * Main class. Starts the program, opens the login window, and opens a database connection.
+ */
 public class Main extends Application {
 
     @Override
@@ -22,6 +25,7 @@ public class Main extends Application {
 
     public static void main(String[] args) throws Exception {
         DBConnection.startConnection();
+        System.out.println(com.sun.javafx.runtime.VersionInfo.getRuntimeVersion());
         launch(args);
     }
 }

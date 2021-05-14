@@ -30,6 +30,11 @@ import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * This class controls the main window of the program, a list of customers and their information. It can bring up windows
+ * to add or update a customer, it can delete customers, it can bring up a window of reports to look at, and bring up
+ * a window to show appointments.
+ */
 public class CustomerViewWindowController {
 
     @FXML
@@ -88,7 +93,10 @@ public class CustomerViewWindowController {
 
     }
 
-
+    /**
+     * Fills the customer table with all customers from the database
+     * @throws SQLException error with the DB
+     */
     private void populateCustTable() throws SQLException {
         FilteredList<Customer> customers = new FilteredList<>(CustomerDAO.getAllCustomers());
         custIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -113,7 +121,12 @@ public class CustomerViewWindowController {
         openCustomerWindow(true);
     }
 
-
+    /**
+     * Opens the customer window, checking for if the user is either adding or updating a customer
+     * @param updatingCustomer if the user is updating a customer
+     * @throws IOException error opening up window
+     * @throws SQLException error with the DB
+     */
     private void openCustomerWindow(boolean updatingCustomer) throws IOException, SQLException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("CustomerWindow.fxml"));
         Parent root = loader.load();
@@ -141,6 +154,12 @@ public class CustomerViewWindowController {
         stage.show();
     }
 
+    /**
+     * Opens the appointment window, passing the customer selected to add an appointment for. Opens an error popup if
+     * no customer is selected.
+     * @throws IOException error opening the window
+     * @throws SQLException error with the DB
+     */
     @FXML
     public void openAppointmentWindow() throws IOException, SQLException {
         Customer customerSelected = custTable.getSelectionModel().getSelectedItem();
@@ -162,6 +181,10 @@ public class CustomerViewWindowController {
         }
     }
 
+    /**
+     * Opens the appointment window
+     * @throws IOException error opening the window
+     */
     @FXML
     public void goToAppointments() throws IOException {
         Stage stage = new Stage();
@@ -173,6 +196,12 @@ public class CustomerViewWindowController {
         stage.show();
     }
 
+    /**
+     * Deletes the customer from the database. Checks if a customer is selected and if the customer has no appointments.
+     * Displays an error popup with the information if either are false
+     * @throws SQLException error with the DB
+     * @throws IOException error opening the error window
+     */
     @FXML void deleteCustomer() throws SQLException, IOException {
         Customer custToDelete = custTable.getSelectionModel().getSelectedItem();
         if(custToDelete == null){
@@ -188,16 +217,27 @@ public class CustomerViewWindowController {
         }
     }
 
+    /**
+     * Updates the table after a customer is added or updated from the Customer Window
+     * @throws SQLException error with the DB
+     */
     public void updateTable() throws SQLException {
         populateCustTable();
         checkForAppointments();
     }
 
-    private void closeWindow(){
-        Stage stage = (Stage) appointmentButton.getScene().getWindow();
-        stage.close();
-    }
+//    private void closeWindow(){
+//        Stage stage = (Stage) appointmentButton.getScene().getWindow();
+//        stage.close();
+//    }
 
+    /**
+     * Checks to see if there are any appointments for the user in the next 15 minutes after logging in. The first
+     * lambda expression is to check all appointments that have the same User Id as the user. The second lambda expression
+     * is to then go through each of those and see if it is within 15 minutes of logging in.
+     *
+     * @throws SQLException
+     */
     private void checkForAppointments() throws SQLException {
         ObservableList<Appointment> appointments = AppointmentDAO.getAllAppointments();
         ObservableList<Appointment> userAppointments = FXCollections.observableArrayList();
@@ -217,6 +257,12 @@ public class CustomerViewWindowController {
         });
     }
 
+    /**
+     * Gives a message on the GUI for the user alerting them that there is an appointment within 15 minutes
+     * @param appointment appointment that is upcoming
+     * @param time time until the meeting
+     * @param appointmentTime time of the appointment
+     */
     private void alertAboutAppointment(Appointment appointment, double time, LocalDateTime appointmentTime){
         appointmentAlertLabel.setText("You have an appointment in " + (int)time + " minutes");
         DateTimeFormatter format = DateTimeFormatter.ofPattern("EEEE, MMM dd, yyyy h:mm a");
@@ -224,6 +270,13 @@ public class CustomerViewWindowController {
         appointmentTimeLabel.setText("Start Time: " + appointmentTime.format(format));
     }
 
+    /**
+     * Check to see if the customer has any appointments assigned to them. The lambda is used to go through each
+     * appointment to see if it has the same customer ID as the customer
+     * @param customer customer to check for appointments for
+     * @return True if there are appoints, false if not
+     * @throws SQLException error with the DB
+     */
     private boolean checkForAppointments(Customer customer) throws SQLException {
         AtomicBoolean hasAppointments = new AtomicBoolean(false);
         ObservableList<Appointment> appointments = AppointmentDAO.getAllAppointments();
@@ -238,6 +291,10 @@ public class CustomerViewWindowController {
         return hasAppointments.get();
     }
 
+    /**
+     * Opens the Reports window
+     * @throws IOException error with opening the window
+     */
     @FXML
     public void openReports() throws IOException {
         Stage stage = new Stage();

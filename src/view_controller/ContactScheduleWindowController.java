@@ -15,6 +15,10 @@ import model.Contact;
 
 import java.sql.SQLException;
 
+/**
+ * This class controls the Contact Schedule Report window. It displays all appointments for a contact, with a drop down
+ * box to select different contacts.
+ */
 public class ContactScheduleWindowController {
 
     @FXML
@@ -73,6 +77,11 @@ public class ContactScheduleWindowController {
         stage.close();
     }
 
+    /**
+     * Fills the table with all appointments that a contact has. The lambda expression is used to get all appointments
+     * with the same contact ID
+     * @throws SQLException error with the DB
+     */
     private void fillTable() throws SQLException {
         ObservableList<Appointment> appointments = AppointmentDAO.getAllAppointments();
         ObservableList<Appointment> appointmentsToAdd = FXCollections.observableArrayList();

@@ -1,5 +1,8 @@
 package model;
 
+/**
+ * Class for containing a Contact Object retrieved from the database
+ */
 public class Contact {
 
     private int contactID;

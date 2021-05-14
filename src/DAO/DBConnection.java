@@ -4,6 +4,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * Class used to start the connection to the database and provide a reference to that connection.
+ */
 public class DBConnection {
 
     private static final String protocol = "jdbc";
@@ -17,11 +20,14 @@ public class DBConnection {
     private static final String username = "U06D2w";
     private static final String password = "53688729783";
 
+    /**
+     * Starts the connection to the database
+     * @return connection to the database
+     */
     public static Connection startConnection(){
         try {
             Class.forName(mySQLJDBCDriver);
             conn = DriverManager.getConnection(JDBCUrl, username, password);
-            System.out.println("Connection Successful");
         }
         catch (ClassNotFoundException | SQLException e){
             System.out.print(e.getMessage());
@@ -35,12 +41,12 @@ public class DBConnection {
         return conn;
     }
 
-    public static void closeConnection(){
-        try {
-            conn.close();
-        } catch (SQLException e) {
-            System.out.print(e.getMessage());
-        }
-    }
+//    public static void closeConnection(){
+//        try {
+//            conn.close();
+//        } catch (SQLException e) {
+//            System.out.print(e.getMessage());
+//        }
+//    }
 
 }

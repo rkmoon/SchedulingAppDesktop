@@ -2,6 +2,10 @@ package utils;
 
 import java.time.*;
 
+/**
+ * This class contains a number of useful functions for dealing with the various time operations in the application.
+ * It can convert between EST, local, and UTC time as well as containing the opening and closing business hours.
+ */
 public class TimeUtilities {
 
     private static final String estTime = "US/Eastern";

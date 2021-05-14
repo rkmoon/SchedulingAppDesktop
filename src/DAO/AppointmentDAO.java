@@ -9,10 +9,18 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Class that handles the queries to the database for appointments
+ */
 public class AppointmentDAO {
 
     private static final String tableName = "appointments";
 
+    /**
+     * Gets all appointments from the database
+     * @return list of appointments
+     * @throws SQLException error with the DB
+     */
     public static ObservableList<Appointment> getAllAppointments() throws SQLException {
         ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
         ResultSet rs = DBQuery.selectAllFromTable(tableName);
@@ -22,6 +30,12 @@ public class AppointmentDAO {
         return allAppointments;
     }
 
+    /**
+     * Creates an Appointment Object containing all the data from the resultset.
+     * @param rs result set to create an Appointment from
+     * @return Appointment created by resultset
+     * @throws SQLException error with the DB
+     */
     private static Appointment fillAppointments(ResultSet rs) throws SQLException {
         Appointment appointment = new Appointment();
         appointment.setId(rs.getInt("Appointment_ID"));
@@ -42,6 +56,11 @@ public class AppointmentDAO {
         return appointment;
     }
 
+    /**
+     * Inserts an Appointment object into the database
+     * @param appointment appointment to insert
+     * @throws SQLException error with the DB
+     */
     public static void insertAppointment(Appointment appointment) throws SQLException {
         String insertString = "INSERT INTO appointments (`Appointment_ID`, `Title`, `Description`, `Location`, `Type`, " +
                 "`Start`, `End`, `Create_Date`, `Created_By`, `Last_Update`, `Last_Updated_By`, `Customer_ID`, " +
@@ -66,6 +85,11 @@ public class AppointmentDAO {
         ps.execute();
     }
 
+    /**
+     * Updates an appointment in the database by using the appointment ID to find the appointment to update
+     * @param appointment appointment to update
+     * @throws SQLException error with the DB
+     */
     public static void updateAppointment(Appointment appointment) throws SQLException{
         String updateString = "UPDATE appointments set Title = ?, Description = ?, Location = ?, Type = ?, " +
                 "Start = ?, End = ?, Last_Update = now(), Last_Updated_By = ?," +
@@ -89,6 +113,11 @@ public class AppointmentDAO {
         ps.execute();
     }
 
+    /**
+     * Deletes an appointment from the database, using the appointment ID to find the appointment to delete
+     * @param appointment appointment to delete
+     * @throws SQLException error with the DB
+     */
     public static void deleteAppointment(Appointment appointment) throws SQLException{
         String deleteString = "DELETE FROM appointments WHERE (Appointment_ID = " + appointment.getId() + ")";
         DBQuery.setPrepareStatement(DBConnection.getConnection(), deleteString);

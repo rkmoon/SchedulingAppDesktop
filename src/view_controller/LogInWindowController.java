@@ -20,8 +20,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
+/**
+ * This class controls the login window. It will change languages based on the locale of the user, verify login information,
+ * and log any attempts to login to a text file.
+ */
 public class LogInWindowController {
 
     @FXML
@@ -45,6 +50,9 @@ public class LogInWindowController {
 
     private ResourceBundle rb;
 
+    /**
+     * Initializes the prompt texts and labels with the correct language
+     */
     @FXML
     public void initialize(){
         setLocale();
@@ -53,15 +61,21 @@ public class LogInWindowController {
         userLocationLabel.setText(rb.getString("location") + ": " + locale.getCountry());
     }
 
+    /**
+     * Gets the locale and pulls the correct resource bundle to use for localization
+     */
     public void setLocale(){
         locale = Locale.getDefault();
-        //locale = Locale.FRANCE;
         rb = ResourceBundle.getBundle("language_files/Scheduling", locale);
 
     }
 
+    /**
+     * Checks login information and if correct, closes the window. If incorrect it displays an error message
+     * @throws IOException error opening window
+     */
     @FXML
-    public void logInClicked(javafx.event.ActionEvent actionEvent) throws IOException {
+    public void logInClicked() throws IOException {
         if(checkLogIn()){
             logInSuccessful();
             closeWindow();
@@ -71,9 +85,13 @@ public class LogInWindowController {
         }
     }
 
+    /**
+     * Opens the main window of the application
+     * @throws IOException error opening the window
+     */
     private void logInSuccessful() throws IOException {
         Stage stage = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("CustomerViewWindow.fxml"));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("CustomerViewWindow.fxml")));
 
         Scene scene = new Scene(root);
         stage.setTitle("Scheduling Application");
@@ -81,11 +99,15 @@ public class LogInWindowController {
         stage.show();
     }
 
+    /**
+     * Checks to see if the log in information is correct. It then sets the user logged in if correct, and logs
+     * the login attempt
+     * @return True if login is successful, false if not
+     * @throws IOException error writing log to file
+     */
     private boolean checkLogIn() throws IOException {
-        //return DBQuery.CheckLogIn(usernameText.getText(), passwordText.getText());
         boolean isCorrect = false;
         String checkCredentials = "SELECT User_Name, Password FROM users WHERE User_Name= ? AND Password= ?";
-        // "SELECT User_Name, Password FROM users(User_Name, Password) VALUES(?,?)";
         try {
             DBQuery.setPrepareStatement(DBConnection.getConnection(),checkCredentials);
             PreparedStatement ps = DBQuery.getPrepareStatement();

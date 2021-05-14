@@ -2,6 +2,9 @@ package model;
 
 import java.sql.Timestamp;
 
+/**
+ * Class for containing the Customer Object retrieved from the database
+ */
 public class Customer {
     private int id;
     private String name;

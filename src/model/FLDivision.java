@@ -2,6 +2,9 @@ package model;
 
 import java.sql.Timestamp;
 
+/**
+ * Class for containing the first_level_division object retrieved from the database
+ */
 public class FLDivision {
 
     private int divisionID;

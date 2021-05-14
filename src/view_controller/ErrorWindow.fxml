@@ -12,13 +12,13 @@
    <children>
       <VBox alignment="CENTER" layoutY="3.0" prefHeight="200.0" prefWidth="299.0">
          <children>
-            <Label fx:id="errorLabel" text="You shouldn't see this" wrapText="true">
+            <Label fx:id="errorLabel" text="You shouldn't see this" textAlignment="CENTER" wrapText="true">
                <font>
-                  <Font size="18.0" />
+                  <Font size="14.0" />
                </font>
             </Label>
             <Pane prefHeight="61.0" prefWidth="299.0" />
-            <Button mnemonicParsing="false" text="OK" />
+            <Button mnemonicParsing="false" onAction="#closeWindow" text="OK" />
          </children>
       </VBox>
    </children>

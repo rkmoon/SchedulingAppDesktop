@@ -1,5 +1,9 @@
 package model;
 
+/**
+ * Class used to count the number of appointment types. It includes a counter to add based on information retrieved
+ * from the database
+ */
 public class TypeAppointment {
 
     private String appointmentType;

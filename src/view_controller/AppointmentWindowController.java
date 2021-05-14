@@ -25,6 +25,11 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * This class controls the adding or updating of appointments. It uses the fields to create or update an appointment and add
+ * or update it in the database.
+ */
+
 public class AppointmentWindowController {
 
     @FXML
@@ -75,12 +80,19 @@ public class AppointmentWindowController {
     private Appointment appointmentToUpdate;
     private boolean isUpdate;
 
-
+    /**
+     * Fills the combo boxes with the relevant data and sets a new appointment ID
+     * @throws SQLException Error connecting to DB
+     */
     public void initialize() throws SQLException {
         fillComboBoxes();
         setNewAppointmentID();
     }
 
+    /**
+     * Used from other windows to notify that this is an appointment being updated instead of an appointment added
+     * @param appointment appointment being updated
+     */
     public void setAppointmentToUpdate(Appointment appointment) {
         appointmentToUpdate = appointment;
         isUpdate = true;
@@ -92,6 +104,13 @@ public class AppointmentWindowController {
         closeWindow();
     }
 
+    /**
+     * Calls the AppointmentDAO with the information stored in the fields. Checks for all forms filled, and checks that
+     * all times are valid, including business hours, same day start and end times, and ensuring start time is before
+     * end time. Will display an informational error popup box if there are any errors.
+     * @throws SQLException error with the DB
+     * @throws IOException error opening error windows
+     */
     @FXML
     void onConfirmButton() throws SQLException, IOException {
         if (checkFields() && checkBusinessHours()) {
@@ -124,6 +143,10 @@ public class AppointmentWindowController {
         stage.close();
     }
 
+    /**
+     * Fills the combo boxes on the window with the relevant information to choose from.
+     * @throws SQLException Error with the DB
+     */
     private void fillComboBoxes() throws SQLException {
         fillContactBox();
         fillCustomerBox();
@@ -133,6 +156,11 @@ public class AppointmentWindowController {
         fillMinutesBox(endMinuteTime);
     }
 
+    /**
+     * Takes the information inside the different forms and creates an Appointment object to send to the DAO for
+     * inserting or updating in the DB
+     * @return Appointment to be inserted or updated
+     */
     private Appointment createAppointment() {
         Appointment newAppointment = new Appointment();
         newAppointment.setId(Integer.parseInt(appIdText.getText()));
@@ -148,27 +176,46 @@ public class AppointmentWindowController {
         return newAppointment;
     }
 
-
+    /**
+     * Fills the contact combo box with all contacts
+     * @throws SQLException error with the DB
+     */
     private void fillContactBox() throws SQLException {
         contactBox.setItems(ContactDAO.getAllContacts());
     }
 
+    /**
+     * Filles the customer combo box with all customers
+     * @throws SQLException error with the DB
+     */
     private void fillCustomerBox() throws SQLException {
         customerBox.setItems(CustomerDAO.getAllCustomers());
     }
 
+    /**
+     * Fills the hours combo box with integers ranging from 0 to 23 for the different hours of the day
+     * @param comboBox combo box to fill
+     */
     private void fillHoursBox(ComboBox<String> comboBox) {
         for (int i = 0; i < 24; i++) {
             comboBox.getItems().add(String.valueOf(i));
         }
     }
 
+    /**
+     * Fills the minutes combo box with the valid minutes available for appointments: 0, 15, 30, 45.
+     * @param comboBox combo box to fill
+     */
     private void fillMinutesBox(ComboBox<String> comboBox) {
         for (int i = 0; i < 60; i += 15) {
             comboBox.getItems().add(String.valueOf(i));
         }
     }
 
+    /**
+     * Checks to make sure none of the fields are empty
+     * @return True if all are filled, false if any are missing
+     */
     private boolean checkFields() {
         boolean fieldsFilled = !appIdText.getText().isEmpty() && !titleText.getText().isEmpty() && !descriptionText.getText().isEmpty() &&
                 !locationText.getText().isEmpty() && !typeText.getText().isEmpty() && contactBox.getValue() != null &&
@@ -179,6 +226,13 @@ public class AppointmentWindowController {
         return fieldsFilled;
     }
 
+    /**
+     * Converts the date and time information in the selectors in the window to a Timestamp for insertion into the DB
+     * @param date date chosen by the DatePicker
+     * @param hourBox hour chosen by the hour ComboBox
+     * @param minuteBox minute chosen by the minute ComboBox
+     * @return Timestamp created by the information in the selectors
+     */
     private Timestamp dateAndTimeToTimestamp(DatePicker date, ComboBox<String> hourBox, ComboBox<String> minuteBox) {
         Timestamp timestamp = null;
         int year = date.getValue().getYear();
@@ -193,8 +247,11 @@ public class AppointmentWindowController {
         return timestamp;
     }
 
-
-    //lambda expression to sort appointment ids in descending order for highest ID+1 to make sure it is unique
+    /**
+     * Creates a new unique AppointmentID. The lambda expression here is used to sort appointment ids in different lists
+     * in descending order for highest ID+1 to make sure it is unique.
+     * @throws SQLException error with the DB
+     */
     private void setNewAppointmentID() throws SQLException {
         ObservableList<Appointment> appointments = AppointmentDAO.getAllAppointments();
         appointments.sort(((o1, o2) -> (o2.getId() - o1.getId())));
@@ -202,12 +259,25 @@ public class AppointmentWindowController {
         appIdText.setText(String.valueOf(newAppointmentID));
     }
 
+    /**
+     * Imports the customer from the Customer View Window. It is used to pass information about the customer selected
+     * in that window over to this window. It is then disabled so to allow the user to see which customer they are
+     * creating an appointment for, but not able to switch customers.
+     * @param customer customer to make the appointment for
+     * @throws SQLException error with the DB
+     */
     public void importCustomer(Customer customer) throws SQLException {
         fillCustomerBox();
         customerBox.setValue(customer);
         customerBox.setDisable(true);
     }
 
+    /**
+     * Takes the start time and end time from the combo boxes, converts from local time to EST, and then checks if
+     * that appointment takes place within the business hours of 8AM EST to 10PM EST.
+     * @return True if appointment time is within business hours, False if not
+     * @throws IOException error opening error window
+     */
     private boolean checkBusinessHours() throws IOException {
         boolean isValid;
         LocalDateTime startTime = dateAndTimeToTimestamp(dateDate, startHourTime, startMinuteTime).toLocalDateTime();
@@ -232,17 +302,27 @@ public class AppointmentWindowController {
         return isValid;
     }
 
-
+    /**
+     * Used to get the instance of the Customer Window Controller if opened from there.
+     * @param controller controller of the customer window
+     */
     public void getCustomerMainWindowInstance(CustomerViewWindowController controller) {
         this.customerViewWindowController = controller;
         isOpenedFromCustomer = true;
     }
 
+    /**
+     * Used to get the instance of the Appointment Window Controller if opened from there.
+     * @param controller controller of the appointment window.
+     */
     public void getAppointmentMainWindowInstance(AppointmentViewWindowController controller) {
         this.appointmentViewWindowController = controller;
         isOpenedFromCustomer = false;
     }
 
+    /**
+     * Populates the fields with the currently selected appointment's information if updating an appointment
+     */
     public void setFields() {
         appIdText.setText(String.valueOf(appointmentToUpdate.getId()));
         titleText.setText(appointmentToUpdate.getTitle());
@@ -256,6 +336,12 @@ public class AppointmentWindowController {
 
     }
 
+    /**
+     * Used as a helper method to check through all the contacts for the specific ID stored, then displays the name
+     * in the combo box for convenience of the user. The lambda expression is used to perform the ID check on each
+     * contact in the combobox.
+     * @param contactID ID of the contact assigned to the appointment
+     */
     private void setContactBox(int contactID) {
         ObservableList<Contact> contacts = contactBox.getItems();
         contacts.forEach(contact -> {
@@ -265,6 +351,12 @@ public class AppointmentWindowController {
         });
     }
 
+    /**
+     * Used as a helper method to check through all the customers for the specific ID stored, then displays the name
+     * in the combo box for convenience of the user. The lambda expression is used to perform the ID check on each
+     * customer in the combobox.
+     * @param customerID ID of the customer assigned to the appointment
+     */
     private void setCustomerBox(int customerID) {
         ObservableList<Customer> customers = customerBox.getItems();
         customers.forEach(customer -> {
@@ -274,6 +366,12 @@ public class AppointmentWindowController {
         });
     }
 
+    /**
+     * Takes the start time and end time from the appointment, converts it to local time, then inserts into the combo
+     * boxes when updating an appointment.
+     * @param startTime Timestamp start time from the appointment
+     * @param endTime Timestamp end time from the appointment
+     */
     private void setDateAndTime(Timestamp startTime, Timestamp endTime) {
         LocalDateTime startLDT = startTime.toLocalDateTime();
         LocalDateTime endLDT = endTime.toLocalDateTime();
@@ -286,6 +384,14 @@ public class AppointmentWindowController {
         endMinuteTime.setValue(String.valueOf(endLDT.getMinute()));
     }
 
+    /**
+     * Check if the appointment overlaps with any of the other customer's appointments. The first lambda expression is
+     * used to find any appointments the customer has. The second lambda expression is to check each of those appointment
+     * times against the appointment to be added to the customer
+     * @param appointmentToAdd added appointment to check against other appointments
+     * @return True if there is an overlap, false if there is no overlap
+     * @throws SQLException error with DB
+     */
     private boolean checkAppointmentOverlap(Appointment appointmentToAdd) throws SQLException {
         AtomicBoolean isOverlap = new AtomicBoolean(false);
         Customer customer = customerBox.getSelectionModel().getSelectedItem();

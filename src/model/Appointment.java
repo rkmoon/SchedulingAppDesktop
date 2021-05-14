@@ -7,6 +7,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 
+/**
+ * Class for containing an Appointment Object retrieved from the database
+ */
 public class Appointment {
 
     private int id;

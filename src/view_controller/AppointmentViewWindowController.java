@@ -16,7 +16,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Appointment;
 import utils.Errors;
-import utils.LoggedInUser;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -24,7 +23,12 @@ import java.time.LocalDateTime;
 import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
 import java.util.Locale;
-import java.util.Objects;
+
+/**
+ * This class controls the Appointment View window. It shows all the appointments for either the week or month, and
+ * allows modification or deletion of each appointment shown.
+ *
+ */
 
 
 public class AppointmentViewWindowController {
@@ -84,11 +88,15 @@ public class AppointmentViewWindowController {
         monthRadioClicked();
     }
 
-
+    /**
+     * Populates the table with appointments for both week and month, depending on which radio button is checked
+     * @throws SQLException If there is an error connected to the DB
+     */
     private void populateAppTable() throws SQLException {
 
         FilteredList<Appointment> appointments = new FilteredList<>(AppointmentDAO.getAllAppointments());
-        appointments = new FilteredList<>(getUserAppointments(appointments));
+        // Uncomment this if the user is only supposed to see their own appointments
+        // appointments = new FilteredList<>(getUserAppointments(appointments));
         if(monthRadio.isSelected()){
             appointments = new FilteredList<>(getAllAppointmentsInMonth(appointments));
         }
@@ -108,6 +116,9 @@ public class AppointmentViewWindowController {
 
         appTable.setItems(appointments);
     }
+
+/*
+    // Uncomment if there is a need to have a button to return to customers
     @FXML
     public void goToCustomers() throws IOException {
         Stage stage = new Stage();
@@ -120,19 +131,28 @@ public class AppointmentViewWindowController {
         closeWindow();
     }
 
-    @FXML
-    public void addAppointment() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("AppointmentWindow.fxml"));
-        Parent root = loader.load();
-        AppointmentWindowController appointmentWindowController = loader.getController();
-        appointmentWindowController.getAppointmentMainWindowInstance(this);
+ */
 
-        Stage stage = new Stage();
-        Scene scene = new Scene(root);
-        stage.setTitle("Appointments");
-        stage.setScene(scene);
-        stage.show();
-    }
+//    Uncomment if there is a need to add an app appointment to the appointment window
+//    @FXML
+//    public void addAppointment() throws IOException {
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource("AppointmentWindow.fxml"));
+//        Parent root = loader.load();
+//        AppointmentWindowController appointmentWindowController = loader.getController();
+//        appointmentWindowController.getAppointmentMainWindowInstance(this);
+//
+//        Stage stage = new Stage();
+//        Scene scene = new Scene(root);
+//        stage.setTitle("Appointments");
+//        stage.setScene(scene);
+//        stage.show();
+//    }
+
+    /**
+     * Populates the table with this week's appointments.Executes when the week radio button is chosen. Disables the
+     * week button so it cannot be unchecked and enables the month button.
+     * @throws SQLException Error connecting to DB
+     */
     @FXML
     public void weekRadioClicked() throws SQLException {
         monthRadio.setSelected(false);
@@ -140,6 +160,12 @@ public class AppointmentViewWindowController {
         monthRadio.setDisable(false);
         populateAppTable();
     }
+
+    /**
+     * Populates the table with this month's appointments. Executes when the month radio button is chosen. Disables the
+     * month button so it cannot be unchecked and enables the week button.
+     * @throws SQLException
+     */
     @FXML
     public void monthRadioClicked() throws SQLException {
         weekRadio.setSelected(false);
@@ -148,6 +174,11 @@ public class AppointmentViewWindowController {
         populateAppTable();
     }
 
+    /**
+     * Deletes the currently selected appointment. Gives an error popup if no appointment is selected.
+     * @throws SQLException Error connecting to DB
+     * @throws IOException Error opening window
+     */
     @FXML
     public void deleteAppointment() throws SQLException, IOException {
         Appointment appointmentToDelete = appTable.getSelectionModel().getSelectedItem();
@@ -161,6 +192,11 @@ public class AppointmentViewWindowController {
 
     }
 
+    /**
+     * Takes a list of all appointments and returns only the appointments in the current month
+     * @param appointments list of all appointments to filter by month
+     * @return filtered list of appointments by current month
+     */
     private ObservableList<Appointment> getAllAppointmentsInMonth(FilteredList<Appointment> appointments){
         ObservableList<Appointment> filteredAppointments = FXCollections.observableArrayList();
         appointments.forEach(appointment -> {
@@ -172,9 +208,34 @@ public class AppointmentViewWindowController {
         });
         return filteredAppointments;
     }
+    /**
+     * Takes a list of all appointments and returns only the appointments in the current week
+     * @param appointments list of all appointments to filter by week
+     * @return filtered list of appointments by current week
+     */
+    private ObservableList<Appointment> getAllAppointmentsInWeek(FilteredList<Appointment> appointments) {
+        ObservableList<Appointment> filteredAppointments = FXCollections.observableArrayList();
+        TemporalField weekOfYear = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear();
+        appointments.forEach(appointment -> {
+                    LocalDateTime appointmentTime = appointment.getStart().toLocalDateTime();
+                    LocalDateTime nowTime = LocalDateTime.now();
+                    if (nowTime.get(weekOfYear) == appointmentTime.get(weekOfYear) &&
+                            nowTime.getYear() == appointmentTime.getYear()) {
+                        filteredAppointments.add(appointment);
+                    }
+                }
 
+        );
+        return filteredAppointments;
+    }
+
+    /**
+     * Takes the currently selected appointment opens the appointment window, and sends the information to the new
+     * window to populate the update form. Will open an error pop up if no appointment is selected.
+     * @throws IOException Error opening the window
+     */
     @FXML
-    public void updateAppointmentWindow() throws IOException, SQLException {
+    public void updateAppointmentWindow() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("AppointmentWindow.fxml"));
         Parent root = loader.load();
         AppointmentWindowController appointmentWindowController = loader.getController();
@@ -194,40 +255,28 @@ public class AppointmentViewWindowController {
         }
     }
 
-    private ObservableList<Appointment> getAllAppointmentsInWeek(FilteredList<Appointment> appointments) {
-        ObservableList<Appointment> filteredAppointments = FXCollections.observableArrayList();
-        TemporalField weekOfYear = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear();
-        appointments.forEach(appointment -> {
-            LocalDateTime appointmentTime = appointment.getStart().toLocalDateTime();
-            LocalDateTime nowTime = LocalDateTime.now();
-                    if (nowTime.get(weekOfYear) == appointmentTime.get(weekOfYear) &&
-                            nowTime.getYear() == appointmentTime.getYear()) {
-                        filteredAppointments.add(appointment);
-                    }
-                }
-
-        );
-        return filteredAppointments;
-    }
-
-
+    /**
+     * Updates the table from other windows, such as when an appointment is added or updated
+     * @throws SQLException
+     */
     public void updateTable() throws SQLException {
         populateAppTable();
     }
+//    Uncomment if there needs to be a close window button
+//    private void closeWindow(){
+//        Stage stage = (Stage) custButton.getScene().getWindow();
+//        stage.close();
+//    }
 
-    private void closeWindow(){
-        Stage stage = (Stage) custButton.getScene().getWindow();
-        stage.close();
-    }
-
-    private ObservableList<Appointment> getUserAppointments(ObservableList<Appointment> appointments){
-        int userID = LoggedInUser.getUserID();
-        ObservableList<Appointment> filteredAppointments = FXCollections.observableArrayList();
-        appointments.forEach(appointment -> {
-            if (userID == appointment.getUserId()) {
-                filteredAppointments.add(appointment);
-            }
-        });
-        return filteredAppointments;
-    }
+      // Uncomment if table needs to be filled by only the current users appointments
+//    private ObservableList<Appointment> getUserAppointments(ObservableList<Appointment> appointments){
+//        int userID = LoggedInUser.getUserID();
+//        ObservableList<Appointment> filteredAppointments = FXCollections.observableArrayList();
+//        appointments.forEach(appointment -> {
+//            if (userID == appointment.getUserId()) {
+//                filteredAppointments.add(appointment);
+//            }
+//        });
+//        return filteredAppointments;
+//    }
 }

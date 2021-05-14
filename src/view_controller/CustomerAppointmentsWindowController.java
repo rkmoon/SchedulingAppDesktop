@@ -15,6 +15,10 @@ import model.TypeAppointment;
 import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * This class controls the Customer Appointments report window. It displays the number of appointments by type and by
+ * month.
+ */
 public class CustomerAppointmentsWindowController {
     @FXML
     private TableView<TypeAppointment> typeTable;
@@ -39,8 +43,12 @@ public class CustomerAppointmentsWindowController {
         fillTables();
     }
 
+    /**
+     * Fills the table with appointment types, months, and the number of each
+     * @throws SQLException error with DB
+     */
     private void fillTables() throws SQLException {
-        ObservableList<TypeAppointment> typeAppointments = getNumberofEachType();
+        ObservableList<TypeAppointment> typeAppointments = getNumberOfEachType();
         ObservableList<MonthAppointment> monthAppointments = getNumberOfEachMonth();
         typeCol.setCellValueFactory(new PropertyValueFactory<>("appointmentType"));
         numTypeCol.setCellValueFactory(new PropertyValueFactory<>("number"));
@@ -57,7 +65,15 @@ public class CustomerAppointmentsWindowController {
         stage.close();
     }
 
-    private ObservableList<TypeAppointment> getNumberofEachType() throws SQLException {
+    /**
+     * Gets all appointments, and adds them to a list of AppointmentTypes and counts the number of each type of
+     * appointment. The first lambda expression goes through each appointment and the second checks the current
+     * list of appointments already gone through and compares the type of both, counting up by one if they match and
+     * adding another AppointmentType to the list if no match is found
+     * @return list of all types of appointments and the number of them
+     * @throws SQLException error with the DB
+     */
+    private ObservableList<TypeAppointment> getNumberOfEachType() throws SQLException {
         ObservableList<Appointment> appointments = AppointmentDAO.getAllAppointments();
         ObservableList<TypeAppointment> appointmentTypes = FXCollections.observableArrayList();
         appointments.forEach(appointment -> {
@@ -76,6 +92,14 @@ public class CustomerAppointmentsWindowController {
         return appointmentTypes;
     }
 
+    /**
+     * Gets all appointments, then counts the number of appointments per month. The first lambda expression is used to
+     * go through all of the appointments, and the second is to check if there is already a MonthAppointment object
+     * with that month. If there is, the number of appointments in that month is increased by one, if not, a new
+     * MonthAppointment is added to the list.
+     * @return returns a list of months and how many appointments in each
+     * @throws SQLException error with the DB
+     */
     private ObservableList<MonthAppointment> getNumberOfEachMonth() throws SQLException {
         ObservableList<Appointment> appointments = AppointmentDAO.getAllAppointments();
         ObservableList<MonthAppointment> monthAppointments = FXCollections.observableArrayList();

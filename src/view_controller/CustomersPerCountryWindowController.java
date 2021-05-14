@@ -9,6 +9,9 @@ import model.Customer;
 
 import java.sql.SQLException;
 
+/**
+ * This class controls the Customer per Country window. It goes through each customer and displays the amount in each country.
+ */
 public class CustomersPerCountryWindowController {
 
     @FXML
@@ -41,6 +44,11 @@ public class CustomersPerCountryWindowController {
         stage.close();
     }
 
+    /**
+     * Gets each customer and adds them to the total number of customers in that country. The lambda function is used
+     * to go through each customer.
+     * @throws SQLException error in the DB
+     */
     private void countCustomers() throws SQLException {
         ObservableList<Customer> customers = CustomerDAO.getAllCustomers();
         customers.forEach(customer -> {
@@ -49,12 +57,19 @@ public class CustomersPerCountryWindowController {
 
     }
 
+    /**
+     * Fills the labels with the total number of customers in each country
+     */
     private void fillLabels(){
         usCountLabel.setText(String.valueOf(usCount));
         ukCountLabel.setText(String.valueOf(ukCount));
         canadaCountLabel.setText(String.valueOf(canadaCount));
     }
 
+    /**
+     * Adds one to the total of number of customers in each country
+     * @param country country that the customer is in
+     */
     private void addOne(String country){
         if(country.equals(usString)){
             usCount+=1;

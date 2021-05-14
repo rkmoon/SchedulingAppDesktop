@@ -9,6 +9,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
 
+/**
+ * This class controls the window and opens the report window according to the button pressed.
+ */
 public class ReportsWindowController {
 
     @FXML
