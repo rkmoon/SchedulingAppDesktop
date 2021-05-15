@@ -10,7 +10,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Appointment;
 import model.MonthAppointment;
-import model.TypeAppointment;
 
 import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -20,14 +19,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * month.
  */
 public class CustomerAppointmentsWindowController {
-    @FXML
-    private TableView<TypeAppointment> typeTable;
 
     @FXML
-    private TableColumn<TypeAppointment, String> typeCol;
+    private TableColumn<MonthAppointment, String> typeCol;
 
     @FXML
-    private TableColumn<TypeAppointment, Integer> numTypeCol;
+    private TableColumn<MonthAppointment, Integer> numCol;
 
     @FXML
     private TableView<MonthAppointment> monthTable;
@@ -35,8 +32,6 @@ public class CustomerAppointmentsWindowController {
     @FXML
     private TableColumn<String, Integer> monthCol;
 
-    @FXML
-    private TableColumn<String, Integer> numMonthCol;
 
     @FXML
     public void initialize() throws SQLException {
@@ -45,16 +40,14 @@ public class CustomerAppointmentsWindowController {
 
     /**
      * Fills the table with appointment types, months, and the number of each
+     *
      * @throws SQLException error with DB
      */
     private void fillTables() throws SQLException {
-        ObservableList<TypeAppointment> typeAppointments = getNumberOfEachType();
         ObservableList<MonthAppointment> monthAppointments = getNumberOfEachMonth();
-        typeCol.setCellValueFactory(new PropertyValueFactory<>("appointmentType"));
-        numTypeCol.setCellValueFactory(new PropertyValueFactory<>("number"));
+        typeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
+        numCol.setCellValueFactory(new PropertyValueFactory<>("number"));
         monthCol.setCellValueFactory(new PropertyValueFactory<>("month"));
-        numMonthCol.setCellValueFactory(new PropertyValueFactory<>("number"));
-        typeTable.setItems(typeAppointments);
         monthTable.setItems(monthAppointments);
 
     }
@@ -63,64 +56,51 @@ public class CustomerAppointmentsWindowController {
      * Closes the window
      */
     @FXML
-    public void closeWindow(){
-        Stage stage = (Stage) typeTable.getScene().getWindow();
+    public void closeWindow() {
+        Stage stage = (Stage) monthTable.getScene().getWindow();
         stage.close();
     }
 
     /**
-     * Gets all appointments, and adds them to a list of AppointmentTypes and counts the number of each type of
-     * appointment. The first lambda expression goes through each appointment and the second checks the current
-     * list of appointments already gone through and compares the type of both, counting up by one if they match and
-     * adding another AppointmentType to the list if no match is found
-     * @return list of all types of appointments and the number of them
-     * @throws SQLException error with the DB
-     */
-    private ObservableList<TypeAppointment> getNumberOfEachType() throws SQLException {
-        ObservableList<Appointment> appointments = AppointmentDAO.getAllAppointments();
-        ObservableList<TypeAppointment> appointmentTypes = FXCollections.observableArrayList();
-        appointments.forEach(appointment -> {
-            AtomicBoolean foundMatching = new AtomicBoolean(false);
-            appointmentTypes.forEach(typeAppointment -> {
-                if (typeAppointment.getAppointmentType().equals(appointment.getType())) {
-                    typeAppointment.addOne();
-                    foundMatching.set(true);
-                }
-            });
-            if (foundMatching.get() == false) {
-                appointmentTypes.add(new TypeAppointment(appointment.getType(), 1));
-            }
-
-        });
-        return appointmentTypes;
-    }
-
-    /**
-     * Gets all appointments, then counts the number of appointments per month. The first lambda expression is used to
-     * go through all of the appointments, and the second is to check if there is already a MonthAppointment object
-     * with that month. If there is, the number of appointments in that month is increased by one, if not, a new
-     * MonthAppointment is added to the list.
-     * @return returns a list of months and how many appointments in each
+     * Gets all appointments and numbers them by how many types are in each month. The first lambda expression is to loop
+     * through all appointments and to get the month of that appointment. The second lambda expression is to then loop
+     * through the list of Month appointments and check to see if there is already an appointment in a month, and if there
+     * is check to see if there is one of that type in that month. If there is, one is added to the total number of appointments
+     * of that type in that month.
+     * @return list of MonthAppointment objects
      * @throws SQLException error with the DB
      */
     private ObservableList<MonthAppointment> getNumberOfEachMonth() throws SQLException {
         ObservableList<Appointment> appointments = AppointmentDAO.getAllAppointments();
         ObservableList<MonthAppointment> monthAppointments = FXCollections.observableArrayList();
         appointments.forEach(appointment -> {
-            AtomicBoolean foundMatching = new AtomicBoolean(false);
+            AtomicBoolean foundMatchingMonth = new AtomicBoolean(false);
+            AtomicBoolean foundMatchingType = new AtomicBoolean(false);
             String appointmentMonth = appointment.getStart().toLocalDateTime().getMonth().toString();
-            monthAppointments.forEach(monthAppointment -> {
-                if (monthAppointment.getMonth().equals(appointmentMonth)) {
-                    monthAppointment.addOne();
-                    foundMatching.set(true);
+            if (monthAppointments.isEmpty()) {
+                monthAppointments.add(new MonthAppointment(appointmentMonth, appointment.getType(), 1));
+            } else {
+                monthAppointments.forEach(monthAppointment -> {
+                    if (monthAppointment.getMonth().equals(appointmentMonth)) {
+                        if (monthAppointment.getType().equals(appointment.getType())) {
+                            monthAppointment.addOne();
+                            foundMatchingType.set(true);
+                        }
+                        foundMatchingMonth.set(true);
+                    }
+                });
+                if (foundMatchingMonth.get() && !foundMatchingType.get()) {
+                    monthAppointments.add(new MonthAppointment(appointmentMonth, appointment.getType(), 1));
+                } else if (!foundMatchingMonth.get() && !foundMatchingType.get()) {
+                    monthAppointments.add(new MonthAppointment(appointmentMonth, appointment.getType(), 1));
                 }
-            });
-            if (foundMatching.get() == false) {
-                monthAppointments.add(new MonthAppointment(appointmentMonth, 1));
             }
-
         });
+        System.out.println(monthAppointments);
+
         return monthAppointments;
     }
+
+
 
 }

@@ -26,6 +26,11 @@
             </Label>
             <HBox alignment="CENTER_RIGHT" prefHeight="20.0" prefWidth="1039.0">
                <children>
+                  <RadioButton fx:id="allRadio" mnemonicParsing="false" onAction="#allRadioClicked" text="All">
+                     <HBox.margin>
+                        <Insets right="20.0" />
+                     </HBox.margin>
+                  </RadioButton>
                   <RadioButton fx:id="weekRadio" mnemonicParsing="false" onAction="#weekRadioClicked" text="Week">
                      <padding>
                         <Insets right="20.0" />
