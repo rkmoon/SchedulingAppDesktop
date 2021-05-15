@@ -85,6 +85,9 @@ public class CustomerWindowController {
         fldBox.setItems(FLDivisionDAO.getFLDivisionsInCountry(countrySelected.getCountryID()));
     }
 
+    /**
+     * Closes the window when the cancel button is clicked
+     */
     @FXML
     public void onCancelButton() {
         closeWindow();
@@ -159,7 +162,9 @@ public class CustomerWindowController {
         return newCustomer;
     }
 
-
+    /**
+     * Closes the window
+     */
     private void closeWindow() {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
@@ -190,10 +195,18 @@ public class CustomerWindowController {
 
     }
 
+    /**
+     * Sets the window to be used for updating a customer
+     * @param updateCustomer True if customer is being updated, false if customer is being added
+     */
     public void setUpdateCustomer(boolean updateCustomer) {
         this.isUpdateCustomer = updateCustomer;
     }
 
+    /**
+     * Sets the customer to be updated
+     * @param customerToUpdate customer to be updated
+     */
     public void setCustomerToUpdate(Customer customerToUpdate) {
         this.customerToUpdate = customerToUpdate;
     }

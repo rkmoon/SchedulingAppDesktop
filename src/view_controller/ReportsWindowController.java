@@ -14,6 +14,10 @@ import java.util.Objects;
  */
 public class ReportsWindowController {
 
+    /**
+     * Opens the Customer appointments by month and type window
+     * @throws IOException error opening the window
+     */
     @FXML
     public void openCustomerAppointments() throws IOException {
         Stage stage = new Stage();
@@ -24,6 +28,11 @@ public class ReportsWindowController {
         stage.setScene(scene);
         stage.show();
     }
+
+    /**
+     * Opens the contact schedule window
+     * @throws IOException error opening the window
+     */
     @FXML
     public void openContactSchedule() throws IOException {
         Stage stage = new Stage();
@@ -34,6 +43,11 @@ public class ReportsWindowController {
         stage.setScene(scene);
         stage.show();
     }
+
+    /**
+     * Opens the Customer per country window
+     * @throws IOException error opening the window
+     */
     @FXML
     public void openCustomersPerCountry() throws IOException {
         Stage stage = new Stage();

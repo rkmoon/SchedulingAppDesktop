@@ -59,6 +59,9 @@ public class CustomerAppointmentsWindowController {
 
     }
 
+    /**
+     * Closes the window
+     */
     @FXML
     public void closeWindow(){
         Stage stage = (Stage) typeTable.getScene().getWindow();

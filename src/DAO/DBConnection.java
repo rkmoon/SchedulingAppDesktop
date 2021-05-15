@@ -37,6 +37,10 @@ public class DBConnection {
         return conn;
     }
 
+    /**
+     * Gets the connection
+     * @return connection
+     */
     public static Connection getConnection(){
         return conn;
     }

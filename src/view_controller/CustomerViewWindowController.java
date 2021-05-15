@@ -86,6 +86,11 @@ public class CustomerViewWindowController {
     private Label appointmentTimeLabel;
 
 
+    /**
+     * Initializes the window by populating the customer table and checking to see if the user has any appointments
+     * in the next 15 minutes
+     * @throws SQLException error with the DB
+     */
     @FXML
     public void initialize() throws SQLException {
         populateCustTable();
@@ -110,12 +115,21 @@ public class CustomerViewWindowController {
     }
 
 
-
+    /**
+     * Opens the customer window with the settings to add a customer as opposed to updating a customer
+     * @throws IOException error opening the window
+     * @throws SQLException error with the DB
+     */
     @FXML
     public void openAddCustomerWindow() throws IOException, SQLException {
         openCustomerWindow(false);
     }
 
+    /**
+     * Opens the customer window with the settings to update a customer as opposed to adding a customer
+     * @throws IOException error opening the window
+     * @throws SQLException error with the DB
+     */
     @FXML
     public void openUpdateCustomerWindow() throws IOException, SQLException {
         openCustomerWindow(true);
@@ -283,9 +297,6 @@ public class CustomerViewWindowController {
         appointments.forEach(appointment -> {
             if(customer.getId() == appointment.getCustId()){
                 hasAppointments.set(true);
-            }
-            else{
-                hasAppointments.set(false);
             }
         });
         return hasAppointments.get();

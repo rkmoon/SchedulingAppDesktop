@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.ZoneId;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -58,7 +59,7 @@ public class LogInWindowController {
         setLocale();
         usernameText.setPromptText(rb.getString("username"));
         passwordText.setPromptText(rb.getString("password"));
-        userLocationLabel.setText(rb.getString("location") + ": " + locale.getCountry());
+        userLocationLabel.setText(rb.getString("location") + ": " + ZoneId.systemDefault());
     }
 
     /**

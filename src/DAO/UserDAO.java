@@ -1,5 +1,7 @@
 package DAO;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import model.User;
 
 import java.sql.ResultSet;
@@ -28,6 +30,20 @@ public class UserDAO {
         user.setLastUpdate(rs.getTimestamp("Last_Update"));
         user.setLastUpdatedBy(rs.getString("Last_Updated_By"));
         return user;
+    }
+
+    /**
+     * Gets all users
+     * @return list of all users
+     * @throws SQLException error with the DB
+     */
+    public static ObservableList<User> getAllUsers() throws SQLException {
+        ObservableList<User> users = FXCollections.observableArrayList();
+        ResultSet rs = DBQuery.selectAllFromTable(tableName);
+        while (rs.next()) {
+            users.add(fillUsers(rs));
+        }
+        return users;
     }
 
     /**

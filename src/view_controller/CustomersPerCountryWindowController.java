@@ -32,12 +32,19 @@ public class CustomersPerCountryWindowController {
     private final String canadaString = "Canada";
 
 
-
+    /**
+     * Initializes the window by first counting the customers per country and then filling the labels with that information.
+     * @throws SQLException error with the db
+     */
     @FXML
     public void initialize() throws SQLException {
         countCustomers();
         fillLabels();
     }
+
+    /**
+     * Closes the window
+     */
     @FXML
     void closeWindow() {
         Stage stage = (Stage) usCountLabel.getScene().getWindow();

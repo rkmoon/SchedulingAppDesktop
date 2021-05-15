@@ -50,16 +50,27 @@ public class ContactScheduleWindowController {
 
     private Contact contactSelected;
 
-
+    /**
+     * Initializes the window by filling the contact combo box with a list of all contacts to choose from
+     * @throws SQLException error with the DB
+     */
     public void initialize() throws SQLException {
         fillContactComboBox();
     }
 
+    /**
+     * Fills the contact combo box with all contacts
+     * @throws SQLException error with the DB
+     */
     private void fillContactComboBox() throws SQLException {
         contactBox.setItems(ContactDAO.getAllContacts());
 
     }
 
+    /**
+     * Changes the contents of the table based on the contact selected in the combobox
+     * @throws SQLException
+     */
     @FXML
     public void onContactSelected() throws SQLException {
         if(contactBox.getValue()== null){
@@ -71,6 +82,9 @@ public class ContactScheduleWindowController {
         }
     }
 
+    /**
+     * Closes the window when the close button is clicked
+     */
     @FXML
     public void closeWindow(){
         Stage stage = (Stage) contactBox.getScene().getWindow();
@@ -79,7 +93,8 @@ public class ContactScheduleWindowController {
 
     /**
      * Fills the table with all appointments that a contact has. The lambda expression is used to get all appointments
-     * with the same contact ID
+     * with the same contact ID. The lambda expression used here is for checking each appointment's contact ID against
+     * the contact ID of the contact selected in the combobox and adding those to the list to fill the table.
      * @throws SQLException error with the DB
      */
     private void fillTable() throws SQLException {
@@ -102,6 +117,9 @@ public class ContactScheduleWindowController {
 
     }
 
+    /**
+     * Clears the table of all items
+     */
     private void clearTable(){
         scheduleTable.getItems().clear();
     }

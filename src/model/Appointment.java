@@ -97,6 +97,11 @@ public class Appointment {
         return start;
     }
 
+    /**
+     * Sets the start time with a timestamp, and also converts the start time to a local date time and a formatted
+     * datetime and sets those variables
+     * @param start start time
+     */
     public void setStart(Timestamp start) {
         this.start = start;
         this.localStartTime = TimeUtilities.utcToLocal(start.toLocalDateTime());
@@ -108,6 +113,11 @@ public class Appointment {
         return end;
     }
 
+    /**
+     * Sets the end time with a timestamp, and also converts the end time to a local date time and a formatted
+     * datetime and sets those variables
+     * @param end end time
+     */
     public void setEnd(Timestamp end) {
         this.end = end;
         this.localEndTime = TimeUtilities.utcToLocal(end.toLocalDateTime());

@@ -22,6 +22,9 @@ public class ErrorWindowController {
 
     }
 
+    /**
+     * Closes the window
+     */
     public void closeWindow(){
         Stage stage = (Stage) errorLabel.getScene().getWindow();
         stage.close();

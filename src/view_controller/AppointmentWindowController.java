@@ -3,6 +3,7 @@ package view_controller;
 import DAO.AppointmentDAO;
 import DAO.ContactDAO;
 import DAO.CustomerDAO;
+import DAO.UserDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -14,6 +15,7 @@ import javafx.stage.Stage;
 import model.Appointment;
 import model.Contact;
 import model.Customer;
+import model.User;
 import utils.Errors;
 import utils.LoggedInUser;
 import utils.TimeUtilities;
@@ -69,10 +71,14 @@ public class AppointmentWindowController {
     private ComboBox<Customer> customerBox;
 
     @FXML
+    private ComboBox<User> userBox;
+
+    @FXML
     private Button confirmButton;
 
     @FXML
     private Button cancelButton;
+
 
     private boolean isOpenedFromCustomer;
     private CustomerViewWindowController customerViewWindowController;
@@ -99,6 +105,9 @@ public class AppointmentWindowController {
 
     }
 
+    /**
+     * Closes the window when the cancel button is clicked
+     */
     @FXML
     void onCancelButton() {
         closeWindow();
@@ -150,6 +159,7 @@ public class AppointmentWindowController {
     private void fillComboBoxes() throws SQLException {
         fillContactBox();
         fillCustomerBox();
+        fillUserBox();
         fillHoursBox(startHourTime);
         fillHoursBox(endHourTime);
         fillMinutesBox(startMinuteTime);
@@ -172,7 +182,7 @@ public class AppointmentWindowController {
         newAppointment.setStart(dateAndTimeToTimestamp(dateDate, startHourTime, startMinuteTime));
         newAppointment.setEnd(dateAndTimeToTimestamp(dateDate, endHourTime, endMinuteTime));
         newAppointment.setCustId(customerBox.getValue().getId());
-        newAppointment.setUserId(LoggedInUser.getLoggedIn().getUserID());
+        newAppointment.setUserId(userBox.getValue().getUserID());
         return newAppointment;
     }
 
@@ -182,6 +192,15 @@ public class AppointmentWindowController {
      */
     private void fillContactBox() throws SQLException {
         contactBox.setItems(ContactDAO.getAllContacts());
+    }
+
+    /**
+     * Fills user combo box with all users
+     * @throws SQLException error with the DB
+     */
+    private void fillUserBox() throws SQLException{
+        userBox.setItems(UserDAO.getAllUsers());
+        userBox.setValue(LoggedInUser.getLoggedIn());
     }
 
     /**
@@ -332,6 +351,8 @@ public class AppointmentWindowController {
         setContactBox(appointmentToUpdate.getContactId());
         setDateAndTime(appointmentToUpdate.getStart(), appointmentToUpdate.getEnd());
         setCustomerBox(appointmentToUpdate.getCustId());
+        setUserBox(appointmentToUpdate.getUserId());
+
 
 
     }
@@ -347,6 +368,21 @@ public class AppointmentWindowController {
         contacts.forEach(contact -> {
             if (contactID == contact.getContactID()) {
                 contactBox.setValue(contact);
+            }
+        });
+    }
+
+    /**
+     * Used as a helper method to check through all the users for the specific user ID stored, then displays the name
+     * in the combo box for convenience of the user. The lambda expression is used to perform the ID check on each
+     * user in the combobox.
+     * @param userID
+     */
+    private void setUserBox(int userID){
+        ObservableList<User> users = userBox.getItems();
+        users.forEach(user -> {
+            if(userID == user.getUserID()){
+                userBox.setValue(user);
             }
         });
     }

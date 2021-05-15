@@ -63,7 +63,6 @@ public class CustomerDAO {
      */
     public static void deleteCustomer(Customer customer) throws SQLException {
         String deleteString = "DELETE FROM customers WHERE (Customer_ID = " + customer.getId() + ")";
-        //System.out.println(deleteString);
         DBQuery.setPrepareStatement(DBConnection.getConnection(), deleteString);
         PreparedStatement ps = DBQuery.getPrepareStatement();
         ps.execute();

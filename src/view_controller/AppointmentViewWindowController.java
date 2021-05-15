@@ -81,8 +81,14 @@ public class AppointmentViewWindowController {
     @FXML
     private RadioButton monthRadio;
 
+    @FXML
+    private RadioButton allRadio;
 
 
+    /**
+     * Populates the app
+     * @throws SQLException
+     */
     public void initialize() throws SQLException {
         populateAppTable();
         monthRadioClicked();
@@ -100,7 +106,7 @@ public class AppointmentViewWindowController {
         if(monthRadio.isSelected()){
             appointments = new FilteredList<>(getAllAppointmentsInMonth(appointments));
         }
-        else{
+        else if(weekRadio.isSelected()) {
             appointments = new FilteredList<>(getAllAppointmentsInWeek(appointments));
         }
 
@@ -150,28 +156,47 @@ public class AppointmentViewWindowController {
 
     /**
      * Populates the table with this week's appointments.Executes when the week radio button is chosen. Disables the
-     * week button so it cannot be unchecked and enables the month button.
+     * week button so it cannot be unchecked and enables the other buttons.
      * @throws SQLException Error connecting to DB
      */
     @FXML
     public void weekRadioClicked() throws SQLException {
         monthRadio.setSelected(false);
+        allRadio.setSelected(false);
         weekRadio.setDisable(true);
         monthRadio.setDisable(false);
+        allRadio.setDisable(false);
         populateAppTable();
     }
 
     /**
      * Populates the table with this month's appointments. Executes when the month radio button is chosen. Disables the
-     * month button so it cannot be unchecked and enables the week button.
-     * @throws SQLException
+     * month button so it cannot be unchecked and enables the other buttons.
+     * @throws SQLException error with the DB
      */
     @FXML
     public void monthRadioClicked() throws SQLException {
         weekRadio.setSelected(false);
+        allRadio.setSelected(false);
         monthRadio.setDisable(true);
         weekRadio.setDisable(false);
+        allRadio.setDisable(false);
         populateAppTable();
+    }
+
+    /**
+     * Populates the table with all appointments. Executes when the all radio button is chosen. Disables the all button
+     * so it cannot be unchecked and enables the other buttons.
+     * @throws SQLException error with the DB
+     */
+    @FXML
+    public void allRadioClicked() throws SQLException {
+        weekRadio.setSelected(false);
+        monthRadio.setSelected(false);
+        weekRadio.setDisable(false);
+        monthRadio.setDisable(false);
+        populateAppTable();
+
     }
 
     /**
@@ -186,14 +211,19 @@ public class AppointmentViewWindowController {
             Errors.openErrorMenu(Errors.getNoSelection());
         }
         else {
+            String confirmationDeleteMsg = "Appointment ID: " + appointmentToDelete.getId() + "\n Type: " +
+                    appointmentToDelete.getType() + "\n Deleted";
             AppointmentDAO.deleteAppointment(appointmentToDelete);
+            Errors.openErrorMenu(confirmationDeleteMsg);
             updateTable();
         }
 
     }
 
     /**
-     * Takes a list of all appointments and returns only the appointments in the current month
+     * Takes a list of all appointments and returns only the appointments in the current month. The lambda expression is
+     * used to check to see if an appointment is in the current month, and if it is, it is added to the filtered appointment
+     * list
      * @param appointments list of all appointments to filter by month
      * @return filtered list of appointments by current month
      */
@@ -209,7 +239,8 @@ public class AppointmentViewWindowController {
         return filteredAppointments;
     }
     /**
-     * Takes a list of all appointments and returns only the appointments in the current week
+     * Takes a list of all appointments and returns only the appointments in the current week. The lambda expression is
+     * to check if each appointment is within the week. If it is, it is added to the filtered appointment list.
      * @param appointments list of all appointments to filter by week
      * @return filtered list of appointments by current week
      */

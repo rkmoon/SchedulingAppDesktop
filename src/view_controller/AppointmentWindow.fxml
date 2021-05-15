@@ -14,7 +14,7 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="603.0" prefWidth="376.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_controller.AppointmentWindowController">
    <children>
-      <VBox alignment="CENTER" prefHeight="574.0" prefWidth="389.0">
+      <VBox alignment="CENTER" prefHeight="603.0" prefWidth="376.0">
          <children>
             <Label text="Appointment Information">
                <font>
@@ -24,7 +24,7 @@
                   <Insets top="20.0" />
                </VBox.margin>
             </Label>
-            <HBox prefHeight="400.0" prefWidth="600.0">
+            <HBox prefHeight="452.0" prefWidth="389.0">
                <children>
                   <VBox alignment="TOP_RIGHT" prefHeight="200.0" prefWidth="100.0">
                      <children>
@@ -76,6 +76,11 @@
                         <Label layoutX="60.0" layoutY="286.0" text="Customer">
                            <VBox.margin>
                               <Insets top="20.0" />
+                           </VBox.margin>
+                        </Label>
+                        <Label text="User">
+                           <VBox.margin>
+                              <Insets top="15.0" />
                            </VBox.margin>
                         </Label>
                      </children>
@@ -159,6 +164,11 @@
                               <Insets top="10.0" />
                            </VBox.margin>
                         </ComboBox>
+                        <ComboBox fx:id="userBox" prefWidth="200.0" promptText="Please Select One">
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </ComboBox>
                      </children>
                      <HBox.margin>
                         <Insets left="20.0" top="5.0" />
@@ -169,7 +179,7 @@
                   <Insets top="20.0" />
                </VBox.margin>
             </HBox>
-            <ButtonBar prefHeight="40.0" prefWidth="200.0">
+            <ButtonBar prefHeight="90.0" prefWidth="389.0">
               <buttons>
                 <Button fx:id="confirmButton" mnemonicParsing="false" onAction="#onConfirmButton" text="Confirm" />
                   <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#onCancelButton" text="Cancel" />
